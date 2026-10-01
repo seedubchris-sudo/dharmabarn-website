@@ -279,6 +279,65 @@ form.inq{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
 [data-view]{display:block}
 [data-view][hidden]{display:none!important}
 
+
+/* Tone pass (2026-10-01): quieter, prose-led */
+.hero .name{font-size:clamp(44px,7vw,96px);font-weight:300;letter-spacing:-0.01em}
+.hero .place{margin-top:10px;font-family:var(--f-ui);font-weight:500;font-size:13px;letter-spacing:var(--label-track);text-transform:uppercase;color:var(--siding);opacity:.85}
+.page-hero{min-height:min(52vh,520px)}
+.page-hero h1{font-size:clamp(40px,6vw,80px)}
+.band.tight{padding-block:clamp(24px,4vw,48px)}
+.band.quiet{padding-block:clamp(40px,6vw,72px);border-top:1px solid var(--line)}
+.prose{max-width:60ch}
+.prose p+p{margin-top:1.1em}
+.lead-prose{font-size:clamp(19px,1.1vw + 13px,23px);line-height:1.6;max-width:44ch}
+.aside{max-width:62ch;color:var(--dust)}
+.caption{margin-top:12px;font-size:15.5px;color:var(--dust)}
+.fine-print{font-size:15px;color:var(--dust)}
+.textlink{color:var(--siding);text-decoration:underline;text-decoration-thickness:1px;text-decoration-color:color-mix(in srgb,var(--tungsten) 70%,transparent);text-underline-offset:4px}
+.textlink:hover{color:var(--tungsten)}
+.rooms{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(16px,2.4vw,32px);align-items:start}
+.rooms .room:nth-child(2){margin-top:clamp(0px,4vw,48px)}
+@media (max-width:860px){.rooms{grid-template-columns:1fr}.rooms .room{margin-top:0!important}}
+.room{display:flex;flex-direction:column;gap:12px;text-decoration:none;min-width:0}
+.room .ph{margin:0;aspect-ratio:4/5;overflow:hidden;background:var(--loft)}
+.room .ph img{width:100%;height:100%;object-fit:cover;transition:transform .8s ease}
+.room:hover .ph img{transform:scale(1.03)}
+.room .room-name{font-size:clamp(24px,2vw,30px);font-weight:400}
+.room p{color:var(--dust);font-size:16px;max-width:34ch}
+.split{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(28px,5vw,80px);align-items:start}
+.split .ph{margin:0;overflow:hidden;background:var(--loft)}
+.split .ph img{width:100%;height:100%;object-fit:cover}
+.ph.tall{aspect-ratio:4/5}
+.ph.wide{margin:0;aspect-ratio:21/9;overflow:hidden;background:var(--loft)}
+.ph.wide img{width:100%;height:100%;object-fit:cover}
+.page-title{font-size:clamp(40px,6vw,72px);margin-bottom:24px}
+.small-head{font-size:clamp(22px,1.8vw,26px);font-weight:400;margin-bottom:8px}
+#inventory h2{margin-bottom:8px}
+#inventory .inv-grid{padding:0;margin-top:24px}
+.people{margin-top:32px}
+.person .name{font-size:clamp(22px,2vw,26px);font-weight:400}
+.person .role{text-transform:none;letter-spacing:0;font-family:var(--f-body);font-size:16px;color:var(--dust)}
+.foot-row{display:flex;flex-direction:column;gap:8px;font-size:15px}
+.site-foot{padding-block:48px 72px;border-top:1px solid var(--line)}
+.show .who{font-size:22px}
+@media (max-width:860px){.split{grid-template-columns:1fr}.split.flip > :first-child{order:0}}
+.split{align-items:center}
+@media (min-width:701px){.gal .t{aspect-ratio:auto}}
+.page-hero .wrap{padding-block:clamp(28px,4vw,56px)}
+.hero + .band{padding-top:clamp(40px,5vw,80px)}
+@media (max-width:700px){.hero-media video{object-position:28% center}}
+.clip .th img{scale:1.12}
+.clip:hover .th img{transform:scale(1.04)}
+body[data-view="contact"] .foot-contact{display:none}
+.show{grid-template-columns:120px minmax(0,1fr) auto}
+@media (min-width:1001px){.clips{grid-template-columns:repeat(3,minmax(0,1fr))}}
+a[href^="tel:"]{white-space:nowrap}
+.clip strong{text-wrap:balance}
+.clip .th::after{opacity:0;transition:opacity .25s}
+.clip:hover .th::after,.clip:focus-visible .th::after{opacity:1}
+@media (hover:none){.clip .th::after{opacity:.85}}
+@media (max-width:860px){.small-head{margin-top:32px}}
+
 /* Preview bar + review notes (not part of the live site) */
 .pbar{position:fixed;left:0;right:0;bottom:0;z-index:60;background:var(--loft);border-top:1px solid color-mix(in srgb,var(--tungsten) 45%,transparent);color:var(--siding);padding:10px var(--gutter) calc(10px + env(safe-area-inset-bottom,0px));display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 16px;font-family:var(--f-ui);font-size:12.5px;letter-spacing:.04em}
 .pbar .long{display:inline}@media (max-width:600px){.eyebrow{font-size:11.5px;letter-spacing:.11em}.dateline{font-size:12px;letter-spacing:.1em}.btn{padding-inline:18px}.pbar label{min-height:30px}.pbar{gap:4px 12px;padding-block:6px calc(6px + env(safe-area-inset-bottom,0px))}.pbar .long{display:none}}
@@ -300,13 +359,12 @@ body.notes .rn::before{content:"Review note · ";font-weight:500}
       <a href="#events" data-link>Events</a>
       <a href="#sundance" data-link>Sundance</a>
       <a href="#contact" data-link>Contact</a>
-      <a class="btn btn-primary" href="#contact" data-link>Discuss your project</a>
     </nav>
   </div>
 </header>
 
 <main>
-<!-- ================= HOME ================= -->
+<!-- HOME -->
 <div data-view="home">
   <section class="hero">
     <div class="hero-media">
@@ -316,176 +374,111 @@ body.notes .rn::before{content:"Review note · ";font-weight:500}
       <span class="missing">Video unavailable</span>
     </div>
     <div class="wrap">
-      <p class="eyebrow loc">Hygiene · Longmont · Boulder&nbsp;County,&nbsp;Colorado</p>
-      <h1>Record, film and gather in a 1918 barn</h1>
-      <p class="lead">Dharma Barn is a recording studio, multi-camera soundstage and private venue in Hygiene, near Longmont. Vintage microphones, an API console and professional cameras are set up under one roof.</p>
-      <div class="btn-row">
-        <a class="btn btn-primary arrow" href="#contact" data-link>Discuss your project</a>
-        <a class="btn btn-ghost" href="#reel">Watch the reel</a>
-      </div>
+      <h1 class="name">Dharma Barn</h1>
+      <p class="place">Hygiene, Colorado</p>
     </div>
   </section>
 
   <section class="band">
     <div class="wrap">
-      <div class="trio">
-        <a class="svc" href="#recording" data-link>
-          <div class="ph"><img src="img/console.jpg" alt="API console meters lit amber in the dark control room" loading="lazy"><span class="missing">Photo unavailable</span></div>
-          <p class="eyebrow">Recording &amp; mixing</p>
-          <h3>Studio sound, analog to the core</h3>
-          <p>Tracking, hybrid analog mixing and mastering through an API 1608-II console, vintage Neumann, Telefunken and AKG microphones, and Neve, API and Pultec outboard.</p>
-          <span class="go arrow">Recording </span>
-        </a>
-        <a class="svc" href="#video" data-link>
-          <div class="ph"><img src="img/camera-op.jpg" alt="Camera operator framing a shot on the soundstage" loading="lazy"><span class="missing">Photo unavailable</span></div>
-          <p class="eyebrow">Video production</p>
-          <h3>Multi-camera performance video</h3>
-          <p>Live concert videos and EPK content shot on Sony professional cameras under stage lighting, with multitrack audio mixed in the studio. Apple Immersive Video shoots are available too.</p>
-          <span class="go arrow">Video </span>
-        </a>
-        <a class="svc" href="#events" data-link>
-          <div class="ph"><img src="img/stage-wide.jpg" alt="The barn soundstage under purple and pink stage lights" loading="lazy"><span class="missing">Photo unavailable</span></div>
-          <p class="eyebrow">Events &amp; venue</p>
-          <h3>A stage with real character</h3>
-          <p>Listening-room concerts, private gatherings, rehearsals and livestreams on a lit soundstage inside the restored barn.</p>
-          <span class="go arrow">Events </span>
-        </a>
+      <div class="prose lead-prose">
+        <p>Dharma Barn is a 1918 barn on North 75th Street in Hygiene, between Longmont and Lyons. These days it holds a recording studio, a stage set up for filming, and room for a small show.</p>
+        <p>Bands come out to make a record, to film a live session, or both at once.</p>
       </div>
     </div>
   </section>
 
-  <hr class="rule">
-
-  <section class="band" id="reel">
+  <section class="band tight" id="reel">
     <div class="wrap">
-      <div class="stack read">
-        <p class="eyebrow">Finished work</p>
-        <h2>Sessions filmed here</h2>
-        <p class="muted">Every video below was shot and recorded at Dharma Barn. The reel plays here; the full performances open on YouTube.</p>
-      </div>
-      <div style="margin-top:32px">
-        <div class="player" id="reel-player">
+      <div class="player" id="reel-player">
           <button class="yt-facade" id="reel-video" type="button" aria-label="Play the Dharma Barn Sizzle Reel">
-            <img src="img/sizzle-poster.jpg" alt="Desert Hollow performing on the Dharma Barn stage">
+            <img src="img/reel-poster.jpg" alt="A band playing in the barn">
             <span class="yt-play" aria-hidden="true">&#9654;</span>
           </button>
-          <div class="fallback" hidden style="background:linear-gradient(var(--scrim),var(--scrim)),url(img/sizzle-poster.jpg) center/cover">
-            <p class="eyebrow">This video can't play here</p>
-            <a class="btn btn-primary" href="https://www.youtube.com/watch?v=s7iopa9lM4o" target="_blank" rel="noopener">Watch the reel on YouTube</a>
-          </div>
+        <div class="fallback" hidden style="background:linear-gradient(var(--scrim),var(--scrim)),url(img/reel-poster.jpg) center/cover">
+          <a class="textlink" href="https://www.youtube.com/watch?v=s7iopa9lM4o" target="_blank" rel="noopener">Watch the reel on YouTube</a>
         </div>
-        <div class="player-cap"><span>Dharma Barn Sizzle Reel · 1:33</span><span>Dan Rodriguez · Desert Hollow · and more</span></div>
       </div>
-      <div class="clips" data-clips="home"></div>
+      <p class="caption">A few sessions from the barn: Dan Rodriguez, Desert Hollow, Shook Twins and others.</p>
     </div>
   </section>
 
-  <section class="band" style="padding-top:0">
+  <section class="band">
     <div class="wrap">
-      <div class="split">
-        <div class="ph"><img src="img/mics-lineup.jpg" alt="Four vintage tube microphones laid side by side" loading="lazy" style="aspect-ratio:4/5"><span class="missing">Photo unavailable</span></div>
-        <div class="stack">
-          <p class="eyebrow">Why artists book the barn</p>
-          <h2>Video that sounds as good as it looks</h2>
-          <p class="lead">Most performance videos are made by camera crews. Ours are made by a recording studio that also films.</p>
-          <div class="benefits" style="grid-template-columns:1fr;margin-top:12px;gap:4px">
-            <div class="benefit"><h3>Studio-grade audio</h3><p>Every shoot is multitracked through vintage microphones and discrete preamps, then mixed on the API console.</p></div>
-            <div class="benefit"><h3>A room on camera</h3><p>Timber beams, stage lighting and the 1918 barn give each video its own look, unlike a club or a white studio.</p></div>
-            <div class="benefit"><h3>One crew, start to finish</h3><p>Recording, filming, mixing and editing happen in one place with one team, led by audio/visual director Chris Wright.</p></div>
-          </div>
-        </div>
+      <div class="rooms">
+        <a class="room" href="#recording" data-link>
+          <figure class="ph"><img src="img/mics-stand.jpg" alt="Vintage microphones on stands in the studio" loading="lazy"><span class="missing">Photo unavailable</span></figure>
+          <h2 class="room-name">Recording</h2>
+          <p>An API console and a cabinet of old Neumann, Telefunken and AKG microphones.</p>
+        </a>
+        <a class="room" href="#video" data-link>
+          <figure class="ph"><img src="img/camera-op.jpg" alt="Camera operator on the stage" loading="lazy"><span class="missing">Photo unavailable</span></figure>
+          <h2 class="room-name">Video</h2>
+          <p>The stage is lit and wired to film from several angles at once.</p>
+        </a>
+        <a class="room" href="#events" data-link>
+          <figure class="ph"><img src="img/fiddle-show.jpg" alt="Fiddle and guitar on the barn stage" loading="lazy"><span class="missing">Photo unavailable</span></figure>
+          <h2 class="room-name">Events</h2>
+          <p>Small concerts, dinners and rehearsals in the barn.</p>
+        </a>
       </div>
     </div>
   </section>
 
-  <section class="festival band">
-    <div class="bg"><img src="img/barn-moon.jpg" alt="" loading="lazy"></div>
+  <section class="band quiet">
     <div class="wrap">
-      <div class="stack read">
-        <p class="dateline">Sundance 2027 · January&nbsp;21–31 · Boulder</p>
-        <h2>A private base for festival week</h2>
-        <p class="lead">We are taking inquiries for private screenings, brand hospitality and on-site content capture during the 2027 Festival, at our property in Hygiene.</p>
-        <p style="font-size:15.5px;color:var(--siding);opacity:.85">Dharma Barn is an independent venue and is not affiliated with the Sundance Institute.</p>
-        <div class="btn-row"><a class="btn btn-primary arrow" href="#sundance" data-link>Sundance 2027</a></div>
-      </div>
+      <p class="aside">The Sundance Film Festival comes to Boulder in January 2027. We're hosting a few private screenings and gatherings at the barn that week. <a class="textlink" href="#sundance" data-link>More about that</a>.</p>
     </div>
   </section>
 </div>
 
-<!-- ================= RECORDING ================= -->
+<!-- RECORDING -->
 <div data-view="recording" hidden>
   <section class="hero page-hero">
-    <div class="hero-media"><img src="img/console.jpg" alt="API 1608-II console glowing in the dark control room"><span class="missing">Photo unavailable</span></div>
-    <div class="wrap">
-      <p class="eyebrow">Recording &amp; mixing</p>
-      <h1>A world-class signal chain in a barn</h1>
-      <p class="lead">Track a band live on the soundstage, overdub in the room, and mix through analog hardware chosen over decades by audio/visual director Chris Wright.</p>
-      <div class="btn-row"><a class="btn btn-primary arrow" href="#contact" data-link data-type="Recording or mixing">Discuss your project</a></div>
-    </div>
+    <div class="hero-media"><img src="img/console.jpg" alt="The API 1608-II console in the control room"><span class="missing">Photo unavailable</span></div>
+    <div class="wrap"><h1>Recording</h1></div>
   </section>
 
   <section class="band">
-    <div class="wrap">
-      <div class="stack read">
-        <p class="eyebrow">Services</p>
-        <h2>What we record</h2>
+    <div class="wrap split">
+      <div class="prose">
+        <p>We track, mix and master at the barn. A band can set up on the stage and play together, or work through the parts one at a time.</p>
+        <p>Everything runs through an API 1608-II console. The microphones are mostly old ones: a Neumann U 47 with its VF14 tube, a U 67, an AKG C24, a Telefunken ELA M 251 E. Neve, API, Manley and Pultec hardware does most of the rest.</p>
+        <p>Mastering has its own chain, with Pultec equalizers, a Requisite L2M limiter and Lynx and SPL converters.</p>
+        <p>Chris Wright runs the studio and the video work.</p>
       </div>
-      <div class="svc-list">
-        <div><h3>Tracking</h3><p>Full bands live on the soundstage, or instruments and vocals one at a time. Vintage tube microphones into Neve, API and Focusrite preamps.</p></div>
-        <div><h3>Mixing</h3><p>Hybrid analog and digital mixing on the API 1608-II console with Pultec, Manley and Neve processing.</p></div>
-        <div><h3>Mastering</h3><p>A dedicated mastering path through Pultec EQM-1S3 equalizers, the Requisite Audio L2M limiter, Lynx Hilo 2 and SPL Mercury conversion.</p></div>
-        <div><h3>Live and livestream audio</h3><p>Multitrack capture of concerts and livestreams, mixed afterward from the stems so the release sounds finished.</p></div>
-      </div>
+      <figure class="ph tall"><img src="img/mics-lineup.jpg" alt="Four vintage tube microphones laid side by side" loading="lazy"><span class="missing">Photo unavailable</span></figure>
     </div>
   </section>
 
-  <section class="band" style="padding-top:0">
+  <section class="band tight">
     <div class="wrap">
-      <div class="gal">
-        <figure class="w7 h"><img src="img/rack.jpg" alt="Outboard rack: Manley Variable Mu compressor and Pultec EQM-1S3 equalizer" loading="lazy"><span class="missing">Photo unavailable</span></figure>
-        <figure class="w5 h"><img src="img/mics-stand.jpg" alt="Vintage condenser microphones on stands" loading="lazy" style="object-position:center 30%"><span class="missing">Photo unavailable</span></figure>
-      </div>
+      <figure class="ph wide"><img src="img/rack.jpg" alt="Manley Variable Mu compressor and Pultec EQM-1S3 equalizer in the rack" loading="lazy"><span class="missing">Photo unavailable</span></figure>
     </div>
   </section>
 
-  <section class="band" style="padding-top:0">
+  <section class="band" id="inventory">
     <div class="wrap">
-      <div class="stack read">
-        <p class="eyebrow">Selected equipment</p>
-        <h2>The gear behind the sound</h2>
-        <p class="muted">A short selection. The full inventory is listed below.</p>
-      </div>
-      <div class="gear">
-        <div><span class="cat">Tube microphone</span><span class="model">Neumann U 47</span><span class="why">Vintage, with the VF14 tube and M7 capsule.</span></div>
-        <div><span class="cat">Tube microphone</span><span class="model">Telefunken ELA&nbsp;M&nbsp;251&nbsp;E</span><span class="why">A classic vocal microphone.</span></div>
-        <div><span class="cat">Stereo tube microphone</span><span class="model">AKG C24</span><span class="why">Vintage stereo microphone with two C12-type capsules.</span></div>
-        <div><span class="cat">Console</span><span class="model">API 1608-II</span><span class="why">All-discrete analog console for tracking and mixing.</span></div>
-        <div><span class="cat">Preamp &amp; EQ</span><span class="model">Neve 31102</span><span class="why">Vintage Class A console modules, paired with Neve 32264A compressors.</span></div>
-        <div><span class="cat">Tube compressor</span><span class="model">Manley Variable Mu</span><span class="why">Stereo tube compression for mix bus and mastering.</span></div>
-        <div><span class="cat">Tube equalizer</span><span class="model">Pultec EQM-1S3</span><span class="why">A pair of mastering-grade program equalizers.</span></div>
-        <div><span class="cat">Monitoring &amp; conversion</span><span class="model">PMC6-2 · Antelope</span><span class="why">PMC6-2 reference monitors; Antelope Orion 32+ Gen 4 conversion clocked by a 10MX atomic clock.</span></div>
-      </div>
-
-      <details class="inv" id="inventory">
-        <summary>Full equipment inventory</summary>
-        <div class="inv-grid">
+      <h2>Equipment</h2>
+      <details class="inv"><summary>Full equipment list</summary>
+      <div class="inv-grid">
           <div><h4>Microphones</h4><ul>
             <li><span>Neumann U 47 (VF14, M7)</span><span>vintage</span></li>
-            <li><span>Telefunken ELA M 251 E</span><span>1</span></li>
-            <li><span>Neumann U 67</span><span>1</span></li>
+            <li><span>Telefunken ELA M 251 E</span><span></span></li>
+            <li><span>Neumann U 67</span><span></span></li>
             <li><span>Neumann SM 2 stereo (KM 56)</span><span>vintage</span></li>
             <li><span>Neumann KM 56</span><span>vintage</span></li>
             <li><span>AKG C24 stereo</span><span>vintage</span></li>
             <li><span>Neumann KM 140</span><span>×2</span></li>
             <li><span>Schoeps CMC 6</span><span>×2</span></li>
-            <li><span>Royer R-121 ribbon</span><span>1</span></li>
+            <li><span>Royer R-121 ribbon</span><span></span></li>
             <li><span>Sennheiser MD 421</span><span>×2</span></li>
             <li><span>Sennheiser MD 409</span><span>×2 vintage</span></li>
             <li><span>Shure SM57</span><span>×8</span></li>
             <li><span>Shure SM58</span><span>×8</span></li>
           </ul></div>
           <div><h4>Console &amp; preamps</h4><ul>
-            <li><span>API 1608-II console</span><span>1</span></li>
+            <li><span>API 1608-II console</span><span></span></li>
             <li><span>API 212L preamp</span><span>×8</span></li>
             <li><span>API 512 preamp</span><span>×16</span></li>
             <li><span>Neve 31102 pre/EQ</span><span>×2 vintage</span></li>
@@ -501,21 +494,21 @@ body.notes .rn::before{content:"Review note · ";font-weight:500}
             <li><span>API 550b</span><span>×2</span></li>
           </ul></div>
           <div><h4>Dynamics</h4><ul>
-            <li><span>Manley Variable Mu</span><span>1</span></li>
+            <li><span>Manley Variable Mu</span><span></span></li>
             <li><span>Neve 32264A</span><span>×2 vintage</span></li>
             <li><span>AMS Neve 2264ALB</span><span>×2</span></li>
             <li><span>Empirical Labs EL8 Distressor</span><span>×2</span></li>
-            <li><span>Vertigo Sound VSC-3</span><span>1</span></li>
+            <li><span>Vertigo Sound VSC-3</span><span></span></li>
             <li><span>ADR Compex F760X-RS</span><span>vintage</span></li>
-            <li><span>Requisite Audio L2M limiter</span><span>1</span></li>
+            <li><span>Requisite Audio L2M limiter</span><span></span></li>
           </ul>
           <h4 style="margin-top:22px">Effects, conversion &amp; monitoring</h4><ul>
-            <li><span>Eventide H8000</span><span>1</span></li>
-            <li><span>Moog analog delay</span><span>1</span></li>
+            <li><span>Eventide H8000</span><span></span></li>
+            <li><span>Moog analog delay</span><span></span></li>
             <li><span>Antelope Orion 32+ Gen 4</span><span>32 I/O</span></li>
-            <li><span>Antelope 10MX atomic clock</span><span>1</span></li>
-            <li><span>Lynx Hilo 2</span><span>1</span></li>
-            <li><span>SPL Mercury D/A</span><span>1</span></li>
+            <li><span>Antelope 10MX atomic clock</span><span></span></li>
+            <li><span>Lynx Hilo 2</span><span></span></li>
+            <li><span>SPL Mercury D/A</span><span></span></li>
             <li><span>PMC6-2 monitors + sub extension</span><span>pair</span></li>
           </ul></div>
         </div>
@@ -523,237 +516,127 @@ body.notes .rn::before{content:"Review note · ";font-weight:500}
     </div>
   </section>
 
-  <section class="cta-band"><div class="wrap"><h2 style="max-width:18ch">Have a record in mind?</h2><a class="btn btn-primary arrow" href="#contact" data-link data-type="Recording or mixing">Discuss your project</a></div></section>
+  <section class="band quiet">
+    <div class="wrap"><p class="aside">To talk about a record, write to <a class="textlink" href="mailto:dharmafarm@icloud.com">dharmafarm@icloud.com</a> or call Chris at <a class="textlink" href="tel:+17208785459">(720) 878-5459</a>.</p></div>
+  </section>
 </div>
 
-<!-- ================= VIDEO ================= -->
+<!-- VIDEO -->
 <div data-view="video" hidden>
   <section class="hero page-hero">
-    <div class="hero-media"><img src="img/stage-teal.jpg" alt="The soundstage lit teal with drum kit and amplifiers set up"><span class="missing">Photo unavailable</span></div>
-    <div class="wrap">
-      <p class="eyebrow">Video production</p>
-      <h1>Performance video with studio sound</h1>
-      <p class="lead">Multi-camera concert films, EPKs and social content shot on the barn soundstage, with the audio recorded and mixed like a record.</p>
-      <div class="btn-row"><a class="btn btn-primary arrow" href="#contact" data-link data-type="Live session (audio + video)">Discuss your project</a><a class="btn btn-ghost" href="#video-reel">Watch the work</a></div>
-    </div>
+    <div class="hero-media"><img src="img/stage-teal.jpg" alt="The stage lit teal with a drum kit set up"><span class="missing">Photo unavailable</span></div>
+    <div class="wrap"><h1>Video</h1></div>
   </section>
 
-  <section class="band">
+  <section class="band" id="video-reel">
     <div class="wrap">
-      <div class="stack read"><p class="eyebrow">Services</p><h2>What we film</h2></div>
-      <div class="svc-list">
-        <div><h3>Live multi-camera video</h3><p>Concert videos captured from several angles at once on Sony professional cameras and lenses, under professional stage lighting.</p></div>
-        <div><h3>EPKs and social content</h3><p>Performance clips sized for press kits, YouTube and social channels.</p></div>
-        <div><h3>Apple Immersive Video</h3><p>3D immersive shoots for artists who want to reach fans on Apple Vision Pro.</p></div>
-        <div><h3>Editing</h3><p>Finished cuts with color, graphics and pacing that follows the music.</p></div>
-        <div><h3>Multitrack audio for film</h3><p>Every camera angle is matched to a multitrack recording, mixed and mastered on the API console and outboard racks.</p></div>
-        <div><h3>Live sessions</h3><p>Record and film a band in one day: multitrack audio, multi-camera video, then a mixed and edited release.</p></div>
-        <div><h3>Interviews and podcasts</h3><p>Seated interviews, panels and podcasts recorded with the same cameras and microphones.</p></div>
-      </div>
-    </div>
-  </section>
-
-  <section class="band" id="video-reel" style="padding-top:0">
-    <div class="wrap">
-      <div class="stack read"><p class="eyebrow">Finished work</p><h2>Watch the sessions</h2></div>
       <div class="clips" data-clips="all"></div>
     </div>
   </section>
 
-  <section class="band" style="padding-top:0">
-    <div class="wrap">
-      <div class="gal">
-        <figure class="w4 t"><img src="img/camera-op.jpg" alt="Camera operator on the soundstage" loading="lazy"><span class="missing">Photo unavailable</span></figure>
-        <figure class="w8 h"><img src="img/stage-drums.jpg" alt="Drum kit set up on the lit stage" loading="lazy"><span class="missing">Photo unavailable</span></figure>
+  <section class="band tight">
+    <div class="wrap split flip">
+      <div class="prose">
+        <p>Shows on the stage are filmed on Sony cameras from several angles under stage lights, and each performance is recorded to multitrack at the same time. We mix the audio in the studio first, then cut the picture to it.</p>
+        <p>Most of what we film is live sessions and concert videos for bands, plus clips for press kits, interviews and podcasts. We can also shoot in Apple Immersive Video for release on Vision Pro.</p>
       </div>
+      <figure class="ph tall"><img src="img/camera-op.jpg" alt="Camera operator framing a shot" loading="lazy"><span class="missing">Photo unavailable</span></figure>
     </div>
   </section>
 
-  <section class="cta-band"><div class="wrap"><h2 style="max-width:18ch">Planning a shoot?</h2><a class="btn btn-primary arrow" href="#contact" data-link data-type="Video production">Discuss your project</a></div></section>
+  <section class="band quiet">
+    <div class="wrap"><p class="aside">For a session or a shoot, write to <a class="textlink" href="mailto:dharmafarm@icloud.com">dharmafarm@icloud.com</a> or call Chris at <a class="textlink" href="tel:+17208785459">(720) 878-5459</a>.</p></div>
+  </section>
 </div>
 
-<!-- ================= EVENTS ================= -->
+<!-- EVENTS -->
 <div data-view="events" hidden>
   <section class="hero page-hero">
-    <div class="hero-media"><img src="img/crowd.jpg" alt="Guests gathered in the barn during a show" style="object-position:center 35%"><span class="missing">Photo unavailable</span></div>
-    <div class="wrap">
-      <p class="eyebrow">Events &amp; venue</p>
-      <h1>Live at Dharma Barn</h1>
-      <p class="lead">Listening-room concerts, private gatherings and rehearsals in a restored 1918 barn with a lit stage and a full sound system.</p>
-      <div class="btn-row"><a class="btn btn-primary arrow" href="#contact" data-link data-type="Event or venue">Discuss your event</a></div>
-    </div>
+    <div class="hero-media"><img src="img/crowd.jpg" alt="Guests in the barn during a show" style="object-position:center 35%"><span class="missing">Photo unavailable</span></div>
+    <div class="wrap"><h1>Events</h1></div>
   </section>
 
   <section class="band">
-    <div class="wrap">
-      <div class="svc-list" style="margin-top:0">
-        <div><h3>Concerts</h3><p>Intimate shows on the soundstage. Many are filmed and recorded for release.</p></div>
-        <div><h3>Private gatherings</h3><p>Dinners, celebrations and receptions in the barn, with the stage and lighting available.</p></div>
-        <div><h3>Rehearsals</h3><p>Prepare a set on a real stage with professional sound before a tour or a show.</p></div>
-        <div><h3>Livestreams</h3><p>Broadcast a performance or event with multi-camera video and a proper audio mix.</p></div>
+    <div class="wrap split">
+      <div class="prose">
+        <p>Every so often the barn opens for a small concert. It also hosts dinners, rehearsals and the odd livestream. The stage, lights and sound are already set up.</p>
+        <p>News about shows goes out on Instagram, at <a class="textlink" href="https://www.instagram.com/dharma_farm_/" target="_blank" rel="noopener">@dharma_farm_</a>.</p>
+      </div>
+      <div>
+        <h2 class="small-head">Recently</h2>
+        <div class="shows">
+          <div class="show"><span class="when">Sept 2026</span><span class="who">Reed Foehl</span><a class="textlink" href="https://www.youtube.com/watch?v=ta1Johw1Sdk" target="_blank" rel="noopener">Watch</a></div>
+          <div class="show"><span class="when">Sept 2026</span><span class="who">Covenhoven</span></div>
+          <div class="show"><span class="when">Earlier</span><span class="who">Dan Rodriguez</span><a class="textlink" href="https://www.youtube.com/watch?v=Kzf7ts125BI" target="_blank" rel="noopener">Watch</a></div>
+        </div>
       </div>
     </div>
   </section>
 
-  <section class="band" style="padding-top:0">
+  <section class="band tight">
     <div class="wrap">
       <div class="gal">
-        <figure class="w8 h"><img src="img/fiddle-show.jpg" alt="Fiddle player and guitarist performing in the barn" loading="lazy"><span class="missing">Photo unavailable</span></figure>
+        <figure class="w8 h"><img src="img/stage-sparkle.jpg" alt="The stage under sparkling lights" loading="lazy"><span class="missing">Photo unavailable</span></figure>
         <figure class="w4 t"><img src="img/dinner-room.jpg" alt="Round dinner tables set under timber beams" loading="lazy"><span class="missing">Photo unavailable</span></figure>
-        <figure class="w6 h"><img src="img/buffet.jpg" alt="Catered buffet laid out in the barn" loading="lazy"><span class="missing">Photo unavailable</span></figure>
-        <figure class="w6 h"><img src="img/stage-sparkle.jpg" alt="Stage lit with sparkling lights" loading="lazy"><span class="missing">Photo unavailable</span></figure>
       </div>
     </div>
   </section>
 
-  <section class="band" style="padding-top:0">
-    <div class="wrap">
-      <div class="stack read">
-        <p class="eyebrow">Recent shows</p>
-        <h2>On the barn stage</h2>
-        <p class="muted">Follow <a href="https://www.instagram.com/dharma_farm_/" target="_blank" rel="noopener">@dharma_farm_</a> on Instagram for news from the barn.</p>
-      </div>
-      <div class="shows">
-        <div class="show"><span class="when">Sept 2026</span><span class="who">Reed Foehl</span><a href="https://www.youtube.com/watch?v=ta1Johw1Sdk" target="_blank" rel="noopener">Watch ↗</a></div>
-        <div class="show"><span class="when">Recent</span><span class="who">Covenhoven</span><span></span></div>
-        <div class="show"><span class="when">Filmed here</span><span class="who">Dan Rodriguez</span><a href="https://www.youtube.com/watch?v=Kzf7ts125BI" target="_blank" rel="noopener">Watch ↗</a></div>
-      </div>
-    </div>
+  <section class="band quiet">
+    <div class="wrap"><p class="aside">For a private event, write to Jeremy Ragland at <a class="textlink" href="mailto:dharmafarm@icloud.com">dharmafarm@icloud.com</a> or call <a class="textlink" href="tel:+13038081091">(303) 808-1091</a>.</p></div>
   </section>
-
-  <section class="cta-band"><div class="wrap"><h2 style="max-width:18ch">Planning an event?</h2><a class="btn btn-primary arrow" href="#contact" data-link data-type="Event or venue">Discuss your event</a></div></section>
 </div>
 
-<!-- ================= SUNDANCE ================= -->
+<!-- SUNDANCE -->
 <div data-view="sundance" hidden>
   <section class="hero page-hero">
     <div class="hero-media"><img src="img/barn-dusk.jpg" alt="The white barn at dusk with lit windows"><span class="missing">Photo unavailable</span></div>
-    <div class="wrap">
-      <p class="dateline" style="margin-bottom:18px">Sundance Film Festival 2027 · January&nbsp;21–31 · Boulder,&nbsp;Colorado</p>
-      <h1>Private production &amp; hospitality for festival week</h1>
-      <p class="lead">A private barn property in Hygiene, near Longmont, with a soundstage, a recording studio and a multi-camera video crew on site.</p>
-      <p class="muted" style="font-size:15.5px;margin-top:12px">Independent venue · not affiliated with the Sundance Institute</p>
-      <div class="btn-row"><a class="btn btn-primary arrow" href="#contact" data-link data-type="Sundance 2027">Discuss your Sundance plans</a></div>
-    </div>
+    <div class="wrap"><h1>Sundance 2027</h1></div>
   </section>
 
   <section class="band">
-    <div class="wrap">
-      <div class="stack read">
-        <p class="eyebrow">What you can do here</p>
-        <h2>Three ways to use the barn</h2>
-        <p class="muted">Each inquiry is planned around your dates, guests and goals. Availability and terms are confirmed directly.</p>
+    <div class="wrap split">
+      <div class="prose">
+        <p>The Sundance Film Festival moves to Boulder for 2027, from January 21 to 31. The barn is in Hygiene, outside the city and away from the downtown venues.</p>
+        <p>That week we'll host a few private screenings, dinners and recorded sessions here.</p>
+        <p>If you're planning something, write to Jeremy Ragland at <a class="textlink" href="mailto:dharmafarm@icloud.com">dharmafarm@icloud.com</a> or call <a class="textlink" href="tel:+13038081091">(303) 808-1091</a>.</p>
+        <p class="fine-print">Dharma Barn is independent and isn't affiliated with the Sundance Institute or the Sundance Film Festival. Festival dates from sundance.org.</p>
       </div>
-      <div class="pkgs">
-        <article class="pkg">
-          <div class="ph"><img src="img/stage-wide.jpg" alt="Soundstage set with lounge seating" loading="lazy"><span class="missing">Photo unavailable</span></div>
-          <div class="body"><p class="eyebrow">Screenings &amp; gatherings</p><h3>Private screenings</h3>
-            <ul><li>Invite-only screenings and filmmaker Q&amp;As</li><li>Cast and crew gatherings</li><li>Distributor and press previews</li></ul></div>
-        </article>
-        <article class="pkg">
-          <div class="ph"><img src="img/buffet.jpg" alt="Catered table set in the barn" loading="lazy"><span class="missing">Photo unavailable</span></div>
-          <div class="body"><p class="eyebrow">Brands &amp; hospitality</p><h3>Brand activations</h3>
-            <ul><li>Sponsor lounges and receptions</li><li>Product launches, tastings and demos</li><li>VIP hospitality, with the event captured on video</li></ul></div>
-        </article>
-        <article class="pkg">
-          <div class="ph"><img src="img/camera-op.jpg" alt="Camera operator at work" loading="lazy" style="object-position:center 25%"><span class="missing">Photo unavailable</span></div>
-          <div class="body"><p class="eyebrow">Audio &amp; video capture</p><h3>Content production</h3>
-            <ul><li>Filmmaker and cast interviews, podcasts and panels</li><li>Live performances and livestreams</li><li>Multitrack audio, editing and delivery of finished assets</li></ul></div>
-        </article>
-      </div>
+      <figure class="ph tall"><img src="img/stage-wide.jpg" alt="The stage set with lounge seating" loading="lazy"><span class="missing">Photo unavailable</span></figure>
     </div>
   </section>
-
-  <section class="band" style="padding-top:0">
-    <div class="wrap">
-      <div class="stack read"><p class="eyebrow">Plan with the facts</p><h2>Where we are</h2></div>
-      <div class="facts">
-        <div><span class="k">Festival</span><span class="v">Jan 21–31, 2027</span><span class="s">In Boulder, Colorado. World premieres Jan 21–26. Source: sundance.org.</span></div>
-        <div><span class="k">Location</span><span class="v">Hygiene, CO</span><span class="s">12281 N 75th St, Longmont, CO 80503. Unincorporated Boulder County, outside the City of Boulder and the Festival's downtown footprint.</span></div>
-        <div><span class="k">On site</span><span class="v">Stage · studio · cameras</span><span class="s">Soundstage with stage lighting, a recording studio and multi-camera video production in one place.</span></div>
-      </div>
-      <p class="disclaim" style="margin-top:32px">Dharma Barn is an independent private venue. It is not affiliated with, endorsed by or part of the Sundance Institute or the Sundance Film Festival.</p>
-    </div>
-  </section>
-
-  <section class="cta-band"><div class="wrap"><h2 style="max-width:20ch">Bring your festival week to the barn</h2><a class="btn btn-primary arrow" href="#contact" data-link data-type="Sundance 2027">Discuss your Sundance plans</a></div></section>
 </div>
 
-<!-- ================= CONTACT ================= -->
+<!-- CONTACT -->
 <div data-view="contact" hidden>
-  <section class="band" style="padding-bottom:clamp(48px,6vw,80px)">
-    <div class="wrap">
-      <div class="stack read">
-        <p class="eyebrow loc">Hygiene · Longmont · Boulder County</p>
-        <h1 style="font-size:clamp(44px,7vw,92px)">Discuss your project</h1>
-        <p class="lead">Tell us what you're planning. We'll reply to talk through dates, scope and what the barn can do for it.</p>
-      </div>
-
-      <div class="contact-grid">
-        <div>
-          <form class="inq" id="inq" novalidate>
-            <div class="fld"><label for="f-name">Name</label><input id="f-name" name="name" autocomplete="name" required><span class="err">Please add your name.</span></div>
-            <div class="fld"><label for="f-email">Email</label><input id="f-email" name="email" type="email" autocomplete="email" required><span class="err">Please add an email address we can reply to.</span></div>
-            <div class="fld"><label for="f-phone">Phone (optional)</label><input id="f-phone" name="phone" type="tel" autocomplete="tel"></div>
-            <div class="fld"><label for="f-when">Dates or timing (optional)</label><input id="f-when" name="when" placeholder="e.g. late January, or flexible"></div>
-            <fieldset class="fld full chips" id="f-type">
-              <legend>What is it?</legend>
-              <label><input type="radio" name="type" value="Recording or mixing"> Recording or mixing</label>
-              <label><input type="radio" name="type" value="Video production"> Video production</label>
-              <label><input type="radio" name="type" value="Live session (audio + video)"> Live session (audio + video)</label>
-              <label><input type="radio" name="type" value="Event or venue"> Event or venue</label>
-              <label><input type="radio" name="type" value="Sundance 2027"> Sundance 2027</label>
-              <label><input type="radio" name="type" value="Something else"> Something else</label>
-              <span class="err" style="width:100%">Please choose the closest option.</span>
-            </fieldset>
-            <div class="fld full"><label for="f-msg">About your project</label><textarea id="f-msg" name="msg" required placeholder="Artist or company, what you'd like to make, rough size of the group, links to your music or past work"></textarea><span class="err">A sentence or two helps us reply usefully.</span></div>
-            <div class="fld full"><button class="btn btn-primary arrow" type="submit" style="justify-self:start">Send inquiry</button></div>
-          </form>
-          <div class="sent" id="sent" hidden role="status" aria-live="polite">
-            <p class="eyebrow" style="color:var(--tungsten)">One more step</p>
-            <p>Your email app should open with this inquiry addressed to dharmafarm@icloud.com. Press send there to reach us. If it didn't open, copy the inquiry below and email it, or call one of the numbers on this page.</p>
-            <div class="btn-row"><a class="btn btn-primary" id="mail-inq" href="mailto:dharmafarm@icloud.com">Open email again</a></div>
-            <pre id="sent-text"></pre>
-            <div class="btn-row"><button class="btn btn-ghost" type="button" id="copy-inq">Copy inquiry</button><button class="btn btn-ghost" type="button" id="edit-inq">Edit</button></div>
-          </div>
+  <section class="band">
+    <div class="wrap split">
+      <div>
+        <h1 class="page-title">Contact</h1>
+        <div class="prose">
+          <p>Write or call and tell us a little about what you have in mind.</p>
         </div>
-
-        <aside>
-          <div class="people">
-            <div class="person"><span class="role">Recording &amp; video production</span><span class="name">Chris Wright</span>
-              <span class="copyable"><a href="tel:+17208785459">(720) 878-5459</a><button class="copy" type="button" data-copy="(720) 878-5459">Copy</button></span></div>
-            <div class="person"><span class="role">Venue &amp; events</span><span class="name">Jeremy Ragland</span>
-              <span class="copyable"><a href="tel:+13038081091">(303) 808-1091</a><button class="copy" type="button" data-copy="(303) 808-1091">Copy</button></span>
-              <span class="copyable"><a href="mailto:dharmafarm@icloud.com">dharmafarm@icloud.com</a><button class="copy" type="button" data-copy="dharmafarm@icloud.com">Copy</button></span></div>
-            <div class="person"><span class="role">Address</span>
-              <span class="copyable" style="font-family:var(--f-body)">12281 N 75th St<br>Longmont, CO 80503</span>
-              <span class="muted" style="font-size:15.5px">In Hygiene, unincorporated Boulder County.</span>
-              <span class="copyable"><a href="https://maps.google.com/?q=12281+N+75th+St,+Longmont,+CO+80503" target="_blank" rel="noopener">Open in Maps ↗</a></span></div>
-          </div>
-        </aside>
+        <div class="people">
+          <div class="person"><span class="name">Chris Wright</span><span class="role">Recording and video</span>
+            <span class="copyable"><a href="tel:+17208785459">(720) 878-5459</a></span></div>
+          <div class="person"><span class="name">Jeremy Ragland</span><span class="role">The barn and events</span>
+            <span class="copyable"><a href="tel:+13038081091">(303) 808-1091</a></span>
+            <span class="copyable"><a href="mailto:dharmafarm@icloud.com">dharmafarm@icloud.com</a></span></div>
+          <div class="person"><span class="name">12281 N 75th St</span><span class="role">Longmont, CO 80503 · in Hygiene, Boulder County</span>
+            <span class="copyable"><a href="https://maps.google.com/?q=12281+N+75th+St,+Longmont,+CO+80503" target="_blank" rel="noopener">Open in Maps</a></span></div>
+        </div>
       </div>
+      <figure class="ph tall"><img src="img/barn-moon.jpg" alt="The barn at night under a full moon" loading="lazy"><span class="missing">Photo unavailable</span></figure>
     </div>
   </section>
 </div>
 </main>
 
 <footer class="site-foot">
-  <div class="wrap">
-    <div class="foot-grid">
-      <div class="stack-sm">
-        <a class="mark" href="#home" data-link>Dharma <span>Barn</span></a>
-        <p>Recording studio, soundstage and private venue in a 1918 barn.</p>
-        <p>12281 N 75th St, Longmont, CO 80503<br>Hygiene · Boulder County, Colorado</p>
-      </div>
-      <div><h4>Explore</h4><ul><li><a href="#recording" data-link>Recording</a></li><li><a href="#video" data-link>Video</a></li><li><a href="#events" data-link>Events</a></li><li><a href="#sundance" data-link>Sundance</a></li><li><a href="#contact" data-link>Contact</a></li></ul></div>
-      <div><h4>Call</h4><ul><li>Production · Chris Wright · (720) 878-5459</li><li>Venue · Jeremy Ragland · (303) 808-1091</li></ul></div>
-      <div><h4>Follow</h4><ul>
-        <li><a href="https://www.youtube.com/@dharma_barn" target="_blank" rel="noopener">YouTube ↗</a></li>
-        <li><a href="https://www.instagram.com/dharma_farm_/" target="_blank" rel="noopener">Instagram ↗</a></li>
-        <li><a href="https://www.facebook.com/p/Dharma-Farm-100095685273767/" target="_blank" rel="noopener">Facebook ↗</a></li>
-      </ul></div>
-    </div>
-    <p class="fine">© 2026 Dharma Barn. Dharma Barn is an independent venue and is not affiliated with the Sundance Institute or the Sundance Film Festival.</p>
+  <div class="wrap foot-row">
+    <p>Dharma Barn · 12281 N 75th St, Longmont, CO 80503 · Hygiene, Boulder County</p>
+    <p class="foot-contact"><a href="tel:+17208785459">(720) 878-5459</a> · <a href="tel:+13038081091">(303) 808-1091</a> · <a href="mailto:dharmafarm@icloud.com">dharmafarm@icloud.com</a></p>
+    <p><a href="https://www.youtube.com/@dharma_barn" target="_blank" rel="noopener">YouTube</a> · <a href="https://www.instagram.com/dharma_farm_/" target="_blank" rel="noopener">Instagram</a> · <a href="https://www.facebook.com/p/Dharma-Farm-100095685273767/" target="_blank" rel="noopener">Facebook</a></p>
   </div>
 </footer>
 
@@ -761,19 +644,18 @@ body.notes .rn::before{content:"Review note · ";font-weight:500}
 <script>
 (function(){
   var CLIPS=[
-    {id:"ta1Johw1Sdk",t:"Reed Foehl",s:"Live at Dharma Barn · 2026"},
-    {id:"mR_TFoWGO_8",t:"Shook Twins",s:"Live at Dharma Barn"},
-    {id:"Ho9cJo9Uzxo",t:"Desert Hollow",s:"Live at Dharma Barn"},
-    {id:"Kzf7ts125BI",t:"Dan Rodriguez",s:"Live at Dharma Barn"},
+    {id:"ta1Johw1Sdk",t:"Reed Foehl",s:"September 2026"},
+    {id:"mR_TFoWGO_8",t:"Shook Twins",s:"At the barn"},
+    {id:"Ho9cJo9Uzxo",t:"Desert Hollow",s:"At the barn"},
+    {id:"Kzf7ts125BI",t:"Dan Rodriguez",s:"At the barn"},
     {id:"0YeE4sCtIh8",t:"Shook Twins · “Coffee”",s:"Sylvan Esso cover"},
-    {id:"DSFyvuu2VrA",t:"Dan Rodriguez · “Wild Horse”",s:"Live at Dharma Barn"},
-    {id:"DnW5WuU5-Tc",t:"Neil Sullivan",s:"Live at Dharma Barn"},
-    {id:"s7iopa9lM4o",t:"Dharma Barn Sizzle Reel",s:"Highlights · 1:33"}
+    {id:"DSFyvuu2VrA",t:"Dan Rodriguez · “Wild Horse”",s:"At the barn"},
+    {id:"DnW5WuU5-Tc",t:"Neil Sullivan",s:"At the barn"}
   ];
   function clipHTML(c){
     return '<a class="clip" href="https://www.youtube.com/watch?v='+c.id+'" target="_blank" rel="noopener" aria-label="Watch '+c.t.replace(/"/g,'')+' on YouTube">'+
       '<div class="th"><img src="img/yt-'+c.id+'.jpg" alt="" loading="lazy"><span class="missing">Thumbnail unavailable</span></div>'+
-      '<strong>'+c.t+'</strong><small>'+c.s+' · YouTube ↗</small></a>';
+      '<strong>'+c.t+'</strong>'+(c.s&&c.s!=='At the barn'?'<small>'+c.s+'</small>':'')+'</a>';
   }
   document.querySelectorAll('[data-clips]').forEach(function(el){
     var list=el.dataset.clips==="home"?CLIPS.slice(0,4):CLIPS;
@@ -814,6 +696,7 @@ body.notes .rn::before{content:"Review note · ";font-weight:500}
     var anchor=null;
     if(!target){ var el=h?document.getElementById(h):null; if(el){ var host=el.closest('[data-view]'); target=host?host.dataset.view:'home'; anchor=el; } else target='home'; }
     views.forEach(function(v){ v.hidden=v.dataset.view!==target; });
+    document.body.setAttribute('data-view',target);
     document.querySelectorAll('.nav a[data-link]:not(.btn)').forEach(function(a){
       if(a.getAttribute('href')==='#'+target) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current');
     });
@@ -830,41 +713,11 @@ body.notes .rn::before{content:"Review note · ";font-weight:500}
   function closeMenu(){ nav.classList.remove('open'); mb.setAttribute('aria-expanded','false'); mb.textContent='Menu'; }
   nav.addEventListener('click',function(e){ if(e.target.closest('a')) closeMenu(); });
   document.addEventListener('keydown',function(e){ if(e.key==='Escape' && nav.classList.contains('open')){ closeMenu(); mb.focus(); } });
-  /* Preselect inquiry type from CTA */
-  document.addEventListener('click',function(e){
-    var a=e.target.closest('a[href="#contact"]'); if(!a) return;
-    if(!a.dataset.type){ document.querySelectorAll('#f-type input').forEach(function(r){r.checked=false}); return; }
-    var r=document.querySelector('#f-type input[value="'+a.dataset.type+'"]'); if(r) r.checked=true;
-  });
-
-  /* Form */
-  var form=document.getElementById('inq'), sent=document.getElementById('sent');
-  function setBad(el,bad){ el.closest('.fld').classList.toggle('bad',bad); if(bad) el.setAttribute('aria-invalid','true'); else el.removeAttribute('aria-invalid'); }
-  form.addEventListener('submit',function(e){
-    e.preventDefault();
-    var name=form.name.value.trim(), email=form.email.value.trim(), msg=form.msg.value.trim();
-    var type=(form.querySelector('input[name=type]:checked')||{}).value||'';
-    var okEmail=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
-    setBad(form.name,!name); setBad(form.email,!okEmail); setBad(form.msg,!msg);
-    document.getElementById('f-type').classList.toggle('bad',!type);
-    var first=form.querySelector('.bad input, .bad textarea');
-    if(!name||!okEmail||!msg||!type){ if(first) first.focus(); return; }
-    var txt='Project inquiry: '+type+'\n\nName: '+name+'\nEmail: '+email+(form.phone.value.trim()?'\nPhone: '+form.phone.value.trim():'')+(form.when.value.trim()?'\nTiming: '+form.when.value.trim():'')+'\n\n'+msg;
-    document.getElementById('sent-text').textContent=txt;
-    var href='mailto:dharmafarm@icloud.com?subject='+encodeURIComponent('Project inquiry: '+type+' ('+name+')')+'&body='+encodeURIComponent(txt);
-    document.getElementById('mail-inq').setAttribute('href',href);
-    form.hidden=true; sent.hidden=false; sent.scrollIntoView({block:'center'});
-    window.location.href=href;
-  });
-  form.addEventListener('input',function(e){ var f=e.target.closest('.fld'); if(f&&f.classList.contains('bad')) f.classList.remove('bad'); });
-  document.getElementById('edit-inq').addEventListener('click',function(){ sent.hidden=true; form.hidden=false; form.name.focus(); });
-
   function copyText(t,btn){
     var done=function(){ var o=btn.textContent; btn.textContent='Copied'; setTimeout(function(){btn.textContent=o},1600); };
     try{ navigator.clipboard.writeText(t).then(done,function(){ fallbackSel(btn); }); }catch(_){ fallbackSel(btn); }
   }
-  function fallbackSel(btn){ var n=btn.closest('.sent')?document.getElementById('sent-text'):btn.previousElementSibling; var r=document.createRange(); r.selectNodeContents(n); var s=getSelection(); s.removeAllRanges(); s.addRange(r); btn.textContent='Selected · press copy'; }
-  document.getElementById('copy-inq').addEventListener('click',function(){ copyText(document.getElementById('sent-text').textContent,this); });
+  function fallbackSel(btn){ var n=btn.previousElementSibling; var r=document.createRange(); r.selectNodeContents(n); var s=getSelection(); s.removeAllRanges(); s.addRange(r); btn.textContent='Selected · press copy'; }
   document.querySelectorAll('.copy').forEach(function(b){ b.addEventListener('click',function(){ copyText(b.dataset.copy,b); }); });
 
   route();
