@@ -1,0 +1,866 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Dharma Barn · Recording, video and venue in Hygiene, Colorado</title>
+<link rel="canonical" href="https://dharmabarn.com/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230f1412'/%3E%3Ctext x='32' y='43' font-family='Futura,Arial,sans-serif' font-size='30' font-weight='500' text-anchor='middle' fill='%23e3a54e'%3EDB%3C/text%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Dharma Barn">
+<meta property="og:description" content="Recording studio, multi-camera video soundstage and private venue in a 1918 barn in Hygiene, near Longmont, Boulder County, Colorado.">
+<meta property="og:url" content="https://dharmabarn.com/">
+<meta property="og:image" content="https://dharmabarn.com/img/barn-dusk.jpg">
+<meta name="twitter:card" content="summary_large_image">
+
+<meta name="description" content="Recording studio, multi-camera soundstage and private venue in a 1918 barn in Hygiene, near Longmont, Boulder County, Colorado.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300..600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<style>
+/* Layout: night-time barn. Full-bleed photo/video bands alternate with a narrow reading column; gig-poster display type, serif body, mono for gear and dates. Single dark look by design. */
+:root{
+  /* "Control Room": light geometric headlines and tracked geometric labels (Jost), serif reading text (Source Serif 4), one amber accent on pine-black. Full-bleed photo/video bands alternate with a narrow reading column. Single dark look by design. */
+  --night:#0f1412;      /* pine-black ground */
+  --loft:#18201d;       /* raised surface */
+  --siding:#e6e4da;     /* main text */
+  --dust:#9aa49d;       /* muted text */
+  --tungsten:#e3a54e;   /* amber: the one accent */
+  --accent-ink:#141006;
+  --night-rgb:15,20,18; --siding-rgb:230,228,218;
+  --line:rgba(230,228,218,.13); --scrim:rgba(9,12,11,.72);
+  --note:#ffd88a; --note-ink:#2a1d05;
+  --f-display:"Jost","Futura","Century Gothic",sans-serif;
+  --f-body:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --f-ui:"Jost","Futura","Century Gothic",sans-serif;
+  --d-weight:300; --d-track:-0.01em; --d-lh:1.06; --d-case:none; --d-opsz:normal;
+  --ui-weight:500; --label-track:.22em; --body-size:clamp(17px,.6vw + 14px,18.5px);
+  --gutter:clamp(16px,4vw,40px);
+  --measure:64ch;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth;scroll-padding-top:84px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{background:var(--night);color:var(--siding);font-family:var(--f-body);font-size:var(--body-size);line-height:1.62;margin:0;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img,video{max-width:100%;display:block}
+a{color:inherit}
+a:focus-visible,button:focus-visible,summary:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--tungsten);outline-offset:3px;border-radius:2px}
+.wrap{max-width:1240px;margin-inline:auto;padding-inline:var(--gutter)}
+.read{max-width:var(--measure)}
+h1,h2,h3{font-family:var(--f-display);font-weight:var(--d-weight);font-variation-settings:var(--d-opsz);text-transform:var(--d-case);letter-spacing:var(--d-track);line-height:var(--d-lh);text-wrap:balance;margin:0}
+h1{font-size:clamp(40px,6.6vw,92px)}
+h2{font-size:clamp(32px,4.2vw,56px)}
+h3{font-size:clamp(22px,1.9vw,27px);line-height:1.18;font-weight:400}
+p{margin:0}
+.eyebrow{font-family:var(--f-ui);font-weight:var(--ui-weight);font-size:12px;letter-spacing:var(--label-track);text-transform:uppercase;color:var(--tungsten)}
+.lead{font-size:clamp(18px,1vw + 13px,21.5px);line-height:1.55;color:var(--siding)}
+.muted{color:var(--dust)}
+.stack{display:flex;flex-direction:column;gap:20px}
+.stack-sm{display:flex;flex-direction:column;gap:10px}
+section.band{padding-block:clamp(64px,9vw,128px)}
+.rule{border:0;border-top:1px solid var(--line);margin:0}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:.55em;font-family:var(--f-ui);font-size:13.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;padding:15px 22px;border-radius:2px;border:1px solid transparent;cursor:pointer;line-height:1.1;min-height:48px}
+.btn-primary{background:var(--tungsten);color:var(--accent-ink)}
+.btn-primary:hover{filter:brightness(1.1)}
+.btn-ghost{border-color:rgba(var(--siding-rgb),.5);color:var(--siding);background:rgba(var(--night-rgb),.35)}
+.btn-ghost:hover{border-color:var(--siding);background:rgba(var(--night-rgb),.6)}
+.btn-row{display:flex;flex-wrap:wrap;gap:12px}
+.arrow::after{content:"→";font-family:var(--f-body)}
+
+/* Header */
+.site-head{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;background:rgba(var(--night-rgb),.9);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.head-row{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:68px}
+.mark{font-family:var(--f-display);font-weight:500;font-size:17px;letter-spacing:.24em;text-transform:uppercase;text-decoration:none;line-height:1;white-space:nowrap}
+.mark span{color:var(--tungsten)}
+.nav{display:flex;align-items:center;gap:clamp(14px,2vw,30px)}
+.nav a{font-family:var(--f-ui);font-weight:500;font-size:12.5px;letter-spacing:var(--label-track);text-transform:uppercase;text-decoration:none;color:var(--dust);padding-block:8px;border-bottom:2px solid transparent}
+.nav a:hover{color:var(--siding)}
+.nav a[aria-current="page"]{color:var(--siding);border-bottom-color:var(--tungsten)}
+.nav .btn{color:var(--accent-ink);padding:11px 16px;min-height:42px;border-bottom:1px solid transparent}
+.menu-btn{display:none;background:none;border:1px solid var(--line);color:var(--siding);font-family:var(--f-ui);font-size:13px;letter-spacing:var(--label-track);text-transform:uppercase;padding:10px 14px;min-height:44px;border-radius:2px;cursor:pointer}
+@media (max-width:1040px){
+  .menu-btn{display:inline-flex}
+  .nav{display:none;position:absolute;left:0;right:0;top:100%;flex-direction:column;align-items:stretch;gap:0;background:var(--night);border-bottom:1px solid var(--line);padding:8px var(--gutter) 20px}
+  .nav.open{display:flex}
+  .nav a{font-size:16px;padding-block:15px;border-bottom:1px solid var(--line)}
+  .nav a[aria-current="page"]{border-bottom-color:var(--line);color:var(--tungsten)}
+  .nav .btn{margin-top:16px;justify-content:center;font-size:15px;padding-block:16px}
+}
+
+/* Hero */
+.hero{position:relative;isolation:isolate;min-height:min(86vh,820px);display:flex;align-items:flex-end;overflow:hidden;background:var(--loft)}
+.hero-media{position:absolute;inset:0;z-index:-2}
+.hero-media img,.hero-media video{width:100%;height:100%;object-fit:cover}
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(var(--night-rgb),.78) 0%,rgba(var(--night-rgb),.35) 60%,rgba(var(--night-rgb),0) 100%),linear-gradient(180deg,rgba(var(--night-rgb),.35) 0%,rgba(var(--night-rgb),.4) 40%,rgba(var(--night-rgb),.94) 86%,var(--night) 100%)}
+@media (max-width:700px){.hero::after{background:linear-gradient(180deg,rgba(var(--night-rgb),.45) 0%,rgba(var(--night-rgb),.6) 35%,rgba(var(--night-rgb),.95) 80%,var(--night) 100%)}}
+.hero .eyebrow,.hero .dateline{text-shadow:0 1px 12px rgba(0,0,0,.85)}
+.hero .wrap{width:100%;padding-block:clamp(48px,8vw,96px)}
+.hero h1{max-width:13ch}
+.hero .lead{max-width:44ch;margin-top:20px}
+.hero .btn-row{margin-top:30px}
+.hero .eyebrow{margin-bottom:18px;color:var(--siding);opacity:.9}
+.page-hero{min-height:min(64vh,620px)}
+.page-hero h1{max-width:16ch}
+
+/* Location pill */
+.loc{display:inline-flex;align-items:center;gap:8px}
+.loc::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--tungsten);box-shadow:0 0 10px color-mix(in srgb,var(--tungsten) 70%,transparent)}
+
+/* Services trio */
+.trio{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(16px,2.4vw,32px)}
+@media (max-width:860px){.trio{grid-template-columns:1fr}}
+.svc{display:flex;flex-direction:column;gap:16px;text-decoration:none;min-width:0}
+.svc .ph{aspect-ratio:4/3;overflow:hidden;background:var(--loft)}
+.svc .ph img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease}
+.svc:hover .ph img{transform:scale(1.04)}
+.svc p{color:var(--dust)}
+.svc .go{font-family:var(--f-ui);font-size:13px;letter-spacing:var(--label-track);text-transform:uppercase;color:var(--tungsten)}
+
+/* Split */
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(28px,5vw,72px);align-items:center}
+.split.flip > :first-child{order:2}
+@media (max-width:860px){.split{grid-template-columns:1fr}.split.flip > :first-child{order:0}}
+.split .ph{overflow:hidden;background:var(--loft)}
+.split .ph img{width:100%;height:100%;object-fit:cover;aspect-ratio:4/3}
+
+/* Benefits */
+.benefits{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(24px,3vw,48px);margin-top:44px}
+@media (max-width:860px){.benefits{grid-template-columns:1fr}}
+.benefit{border-top:1px solid var(--line);padding-top:20px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.benefit p{color:var(--dust)}
+
+/* Video */
+.player{position:relative;background:#000;aspect-ratio:16/9;width:100%;overflow:hidden}
+.player video{width:100%;height:100%;object-fit:contain;background:#000}
+.player .fallback{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:24px;background:linear-gradient(var(--scrim),var(--scrim)),var(--loft) center/cover}
+.player-cap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 20px;margin-top:14px;font-family:var(--f-ui);font-size:13px;letter-spacing:.06em;color:var(--dust)}
+.clips{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(14px,2vw,24px);margin-top:28px}
+@media (max-width:1000px){.clips{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:480px){.clips{grid-template-columns:1fr}}
+.clip{display:flex;flex-direction:column;gap:10px;text-decoration:none;min-width:0}
+.clip .th{position:relative;aspect-ratio:16/9;background:var(--loft);overflow:hidden}
+.clip .th img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease,opacity .3s}
+.clip:hover .th img{transform:scale(1.05)}
+.clip .th::after{content:"▶";position:absolute;left:12px;bottom:10px;width:40px;height:40px;display:grid;place-items:center;border-radius:50%;background:rgba(var(--night-rgb),.75);color:var(--siding);font-size:14px;padding-left:3px;border:1px solid rgba(var(--siding-rgb),.4)}
+.clip:hover .th::after{background:var(--tungsten);color:var(--accent-ink);border-color:var(--tungsten)}
+.clip strong{font-family:var(--f-display);font-weight:400;font-variation-settings:var(--d-opsz);letter-spacing:var(--d-track);font-size:22px;line-height:1.05}
+.clip small{font-family:var(--f-ui);font-size:12.5px;letter-spacing:.06em;color:var(--dust)}
+
+/* Missing media */
+.ph,.th,.gal figure{position:relative}
+.missing{display:none}
+.is-missing > img{visibility:hidden}
+.is-missing > .missing{display:flex;position:absolute;inset:0;align-items:center;justify-content:center;text-align:center;padding:16px;font-family:var(--f-ui);font-size:12.5px;letter-spacing:var(--label-track);text-transform:uppercase;color:var(--dust);background:repeating-linear-gradient(135deg,var(--loft) 0 14px,var(--night) 14px 28px);border:1px dashed var(--line)}
+
+/* Sundance band */
+.festival{position:relative;isolation:isolate;overflow:hidden}
+.festival .bg{position:absolute;inset:0;z-index:-1}
+.festival .bg img{width:100%;height:100%;object-fit:cover}
+.festival::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(var(--night-rgb),.97) 0%,rgba(var(--night-rgb),.93) 55%,rgba(var(--night-rgb),.7) 75%,rgba(var(--night-rgb),.35) 100%)}
+.festival .bg img{object-position:75% center}
+@media (max-width:700px){.page-hero .hero-media img[src$="console.jpg"]{object-position:center 92%}.page-hero:has(img[src$="console.jpg"])::after{background:linear-gradient(180deg,rgba(var(--night-rgb),.7) 0%,rgba(var(--night-rgb),.8) 40%,rgba(var(--night-rgb),.96) 80%,var(--night) 100%)}}
+@media (max-width:860px){.festival::before{background:rgba(var(--night-rgb),.9)}}
+.dateline{font-family:var(--f-ui);font-weight:var(--ui-weight);text-transform:uppercase;font-size:13px;letter-spacing:var(--label-track);color:var(--tungsten);font-variant-numeric:tabular-nums}
+
+/* Lists of services */
+.svc-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 clamp(24px,4vw,64px);margin-top:36px}
+@media (max-width:760px){.svc-list{grid-template-columns:1fr}}
+.svc-list > div{border-top:1px solid var(--line);padding-block:24px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.svc-list p{color:var(--dust)}
+
+/* Gear */
+.gear{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin-top:36px}
+@media (max-width:1000px){.gear{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:440px){.gear{grid-template-columns:1fr}}
+.gear > div{background:var(--night);padding:22px 20px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.gear .cat{font-family:var(--f-ui);font-size:11.5px;letter-spacing:var(--label-track);text-transform:uppercase;color:var(--tungsten)}
+.gear .model{text-wrap:balance;font-family:var(--f-display);font-weight:400;font-variation-settings:var(--d-opsz);letter-spacing:var(--d-track);font-size:23px;line-height:1.05}
+.gear .why{font-size:15.5px;line-height:1.45;color:var(--dust)}
+details.inv{margin-top:28px;border:1px solid var(--line);background:var(--loft)}
+details.inv summary{cursor:pointer;list-style:none;padding:18px 20px;font-family:var(--f-ui);font-size:14px;letter-spacing:var(--label-track);text-transform:uppercase;display:flex;justify-content:space-between;gap:12px;min-height:56px;align-items:center}
+details.inv summary::-webkit-details-marker{display:none}
+details.inv summary::after{content:"+";font-size:20px;color:var(--tungsten)}
+details.inv[open] summary::after{content:"–"}
+.inv-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px 36px;padding:8px 20px 28px}
+@media (max-width:900px){.inv-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.inv-grid{grid-template-columns:1fr}}
+.inv-grid h4{font-family:var(--f-ui);font-weight:500;font-size:12px;letter-spacing:var(--label-track);text-transform:uppercase;color:var(--tungsten);margin:0 0 10px}
+.inv-grid ul{list-style:none;margin:0;padding:0;font-family:var(--f-ui);font-size:13.5px;line-height:1.5}
+.inv-grid li{display:flex;justify-content:space-between;gap:12px;padding-block:6px;border-bottom:1px solid var(--line)}
+.inv-grid li span:last-child{color:var(--dust);white-space:nowrap;font-variant-numeric:tabular-nums}
+
+/* Gallery */
+.gal{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:clamp(8px,1.2vw,14px)}
+.gal figure{margin:0;overflow:hidden;background:var(--loft);min-width:0}
+.gal img{width:100%;height:100%;object-fit:cover}
+.gal .w7{grid-column:span 7}.gal .w5{grid-column:span 5}.gal .w4{grid-column:span 4}.gal .w6{grid-column:span 6}.gal .w8{grid-column:span 8}
+.gal .h{aspect-ratio:4/3}.gal .t{aspect-ratio:3/4}
+@media (max-width:700px){.gal .w7,.gal .w5,.gal .w4,.gal .w6,.gal .w8{grid-column:span 12}.gal .t{aspect-ratio:4/3}}
+
+/* Packages (Sundance) */
+.pkgs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(16px,2vw,28px);margin-top:40px}
+@media (max-width:900px){.pkgs{grid-template-columns:1fr}}
+.pkg{border:1px solid var(--line);background:var(--loft);display:flex;flex-direction:column;min-width:0}
+.pkg .ph{aspect-ratio:16/10;overflow:hidden}
+.pkg .ph img{width:100%;height:100%;object-fit:cover}
+.pkg .body{padding:22px;display:flex;flex-direction:column;gap:12px}
+.pkg ul{margin:0;padding-left:1.1em;color:var(--dust);font-size:16px;line-height:1.5}
+.facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin-top:36px}
+@media (max-width:760px){.facts{grid-template-columns:1fr}}
+.facts > div{background:var(--night);padding:22px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.facts .k{font-family:var(--f-ui);font-size:12px;letter-spacing:var(--label-track);text-transform:uppercase;color:var(--tungsten)}
+.facts .v{font-family:var(--f-display);font-weight:400;font-variation-settings:var(--d-opsz);letter-spacing:var(--d-track);font-size:26px;line-height:1.05}
+.facts .s{font-size:15px;color:var(--dust)}
+.disclaim{font-size:15.5px;color:var(--dust);border-left:2px solid var(--tungsten);padding-left:16px;max-width:var(--measure)}
+
+/* Events list */
+.shows{margin-top:32px;border-top:1px solid var(--line)}
+.show{display:grid;grid-template-columns:150px minmax(0,1fr) auto;gap:16px 28px;align-items:center;padding-block:20px;border-bottom:1px solid var(--line)}
+.show .when{font-family:var(--f-ui);font-size:14px;letter-spacing:.06em;color:var(--tungsten);font-variant-numeric:tabular-nums}
+.show .who{font-family:var(--f-display);font-weight:400;font-variation-settings:var(--d-opsz);letter-spacing:var(--d-track);font-size:28px;line-height:1}
+.show a{font-family:var(--f-ui);font-size:13px;letter-spacing:var(--label-track);text-transform:uppercase;color:var(--siding)}
+@media (max-width:620px){.show{grid-template-columns:1fr;gap:6px}}
+
+/* Contact */
+.contact-grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:clamp(32px,5vw,72px);margin-top:40px;align-items:start}
+@media (max-width:900px){.contact-grid{grid-template-columns:1fr}}
+form.inq{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+@media (max-width:560px){form.inq{grid-template-columns:1fr}}
+.fld{display:flex;flex-direction:column;gap:7px;min-width:0}
+.fld.full{grid-column:1/-1}
+.fld label,.fld legend{font-family:var(--f-ui);font-size:12.5px;letter-spacing:var(--label-track);text-transform:uppercase;color:var(--dust)}
+.fld input,.fld select,.fld textarea{font:inherit;font-size:17px;color:var(--siding);background:var(--loft);border:1px solid rgba(var(--siding-rgb),.28);border-radius:2px;padding:13px 14px;width:100%;min-height:50px}
+.fld textarea{min-height:150px;resize:vertical}
+.fld input:focus,.fld select:focus,.fld textarea:focus{border-color:var(--tungsten);outline:none;box-shadow:0 0 0 3px color-mix(in srgb,var(--tungsten) 28%,transparent)}
+.fld .err{font-size:14.5px;color:#ff9b8a;display:none}
+.fld.bad input,.fld.bad select,.fld.bad textarea{border-color:#ff9b8a}
+.fld.bad .err{display:block}
+.chips{display:flex;flex-wrap:wrap;gap:8px;border:0;padding:0;margin:0}
+.chips legend{margin-bottom:8px;padding:0}
+.chips label{font-family:var(--f-ui);font-size:13px;letter-spacing:.06em;text-transform:none;color:var(--siding);border:1px solid rgba(var(--siding-rgb),.28);padding:10px 14px;border-radius:2px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;min-height:44px}
+.chips input{accent-color:var(--tungsten);width:16px;height:16px;margin:0}
+.chips label:has(input:checked){border-color:var(--tungsten);background:color-mix(in srgb,var(--tungsten) 14%,transparent)}
+.sent{border:1px solid var(--tungsten);background:var(--loft);padding:24px;display:flex;flex-direction:column;gap:14px}
+.sent pre{white-space:pre-wrap;font-family:var(--f-ui);font-size:13.5px;line-height:1.5;background:var(--night);border:1px solid var(--line);padding:14px;margin:0;max-height:260px;overflow:auto}
+.people{display:flex;flex-direction:column;gap:0;border-top:1px solid var(--line)}
+.person{padding-block:20px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:6px}
+.person .role{font-family:var(--f-ui);font-size:12px;letter-spacing:var(--label-track);text-transform:uppercase;color:var(--tungsten)}
+.person .name{font-family:var(--f-display);font-weight:400;font-variation-settings:var(--d-opsz);letter-spacing:var(--d-track);font-size:26px;line-height:1}
+.copyable{display:flex;flex-wrap:wrap;align-items:center;gap:10px;font-family:var(--f-ui);font-size:15.5px;font-variant-numeric:tabular-nums}
+.copyable a{text-decoration:none;border-bottom:1px solid var(--line)}
+.copy{font-family:var(--f-ui);font-size:11.5px;letter-spacing:var(--label-track);text-transform:uppercase;background:none;color:var(--dust);border:1px solid var(--line);padding:6px 9px;border-radius:2px;cursor:pointer;min-height:32px}
+.copy:hover{color:var(--siding);border-color:var(--siding)}
+
+/* CTA band */
+.cta-band{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--loft)}
+.cta-band .wrap{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:24px;padding-block:clamp(40px,6vw,72px)}
+
+/* Footer */
+.site-foot{padding-block:56px 64px;color:var(--dust);font-size:15.5px}
+.foot-grid{display:grid;grid-template-columns:minmax(0,1.4fr) repeat(3,minmax(0,1fr));gap:32px}
+@media (max-width:860px){.foot-grid{grid-template-columns:1fr 1fr}}
+@media (max-width:480px){.foot-grid{grid-template-columns:1fr}}
+.site-foot h4{font-family:var(--f-ui);font-weight:500;font-size:12px;letter-spacing:var(--label-track);text-transform:uppercase;color:var(--siding);margin:0 0 12px}
+.site-foot ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
+.site-foot li a{display:inline-block;padding-block:9px}
+.site-foot a{text-decoration:none}
+.site-foot a:hover{color:var(--siding)}
+.fine{margin-top:40px;padding-top:20px;border-top:1px solid var(--line);font-size:14px}
+
+/* Views */
+[data-view]{display:block}
+[data-view][hidden]{display:none!important}
+
+/* Preview bar + review notes (not part of the live site) */
+.pbar{position:fixed;left:0;right:0;bottom:0;z-index:60;background:var(--loft);border-top:1px solid color-mix(in srgb,var(--tungsten) 45%,transparent);color:var(--siding);padding:10px var(--gutter) calc(10px + env(safe-area-inset-bottom,0px));display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 16px;font-family:var(--f-ui);font-size:12.5px;letter-spacing:.04em}
+.pbar .long{display:inline}@media (max-width:600px){.eyebrow{font-size:11.5px;letter-spacing:.11em}.dateline{font-size:12px;letter-spacing:.1em}.btn{padding-inline:18px}.pbar label{min-height:30px}.pbar{gap:4px 12px;padding-block:6px calc(6px + env(safe-area-inset-bottom,0px))}.pbar .long{display:none}}
+.pbar label{display:inline-flex;align-items:center;gap:8px;cursor:pointer;min-height:36px}
+.pbar input{accent-color:var(--tungsten);width:18px;height:18px}
+.rn{display:none}
+body.notes .rn{display:block;font-family:var(--f-ui);font-size:12.5px;line-height:1.45;letter-spacing:.02em;text-transform:none;color:var(--note-ink);background:var(--note);padding:8px 10px;border-radius:2px;margin-top:8px;max-width:60ch;font-weight:400}
+body.notes .rn::before{content:"Review note · ";font-weight:500}
+</style>
+</head>
+<body>
+<header class="site-head">
+  <div class="wrap head-row">
+    <a class="mark" href="#home" data-link>Dharma <span>Barn</span></a>
+    <button class="menu-btn" id="menu-btn" aria-expanded="false" aria-controls="nav">Menu</button>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="#recording" data-link>Recording</a>
+      <a href="#video" data-link>Video</a>
+      <a href="#events" data-link>Events</a>
+      <a href="#sundance" data-link>Sundance</a>
+      <a href="#contact" data-link>Contact</a>
+      <a class="btn btn-primary" href="#contact" data-link>Discuss your project</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<!-- ================= HOME ================= -->
+<div data-view="home">
+  <section class="hero">
+    <div class="hero-media">
+      <video id="hero-video" muted loop playsinline preload="auto" poster="img/barn-dusk.jpg" aria-hidden="true">
+        <source src="media/hero-loop.mp4" type="video/mp4">
+      </video>
+      <span class="missing">Video unavailable</span>
+    </div>
+    <div class="wrap">
+      <p class="eyebrow loc">Hygiene · Longmont · Boulder&nbsp;County,&nbsp;Colorado</p>
+      <h1>Record, film and gather in a 1918 barn</h1>
+      <p class="lead">Dharma Barn is a recording studio, multi-camera soundstage and private venue in Hygiene, near Longmont. Vintage microphones, an API console and professional cameras are set up under one roof.</p>
+      <div class="btn-row">
+        <a class="btn btn-primary arrow" href="#contact" data-link>Discuss your project</a>
+        <a class="btn btn-ghost" href="#reel">Watch the reel</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
+      <div class="trio">
+        <a class="svc" href="#recording" data-link>
+          <div class="ph"><img src="img/console.jpg" alt="API console meters lit amber in the dark control room" loading="lazy"><span class="missing">Photo unavailable</span></div>
+          <p class="eyebrow">Recording &amp; mixing</p>
+          <h3>Studio sound, analog to the core</h3>
+          <p>Tracking, hybrid analog mixing and mastering through an API 1608-II console, vintage Neumann, Telefunken and AKG microphones, and Neve, API and Pultec outboard.</p>
+          <span class="go arrow">Recording </span>
+        </a>
+        <a class="svc" href="#video" data-link>
+          <div class="ph"><img src="img/camera-op.jpg" alt="Camera operator framing a shot on the soundstage" loading="lazy"><span class="missing">Photo unavailable</span></div>
+          <p class="eyebrow">Video production</p>
+          <h3>Multi-camera performance video</h3>
+          <p>Live concert videos and EPK content shot on Sony professional cameras under stage lighting, with multitrack audio mixed in the studio. Apple Immersive Video shoots are available too.</p>
+          <span class="go arrow">Video </span>
+        </a>
+        <a class="svc" href="#events" data-link>
+          <div class="ph"><img src="img/stage-wide.jpg" alt="The barn soundstage under purple and pink stage lights" loading="lazy"><span class="missing">Photo unavailable</span></div>
+          <p class="eyebrow">Events &amp; venue</p>
+          <h3>A stage with real character</h3>
+          <p>Listening-room concerts, private gatherings, rehearsals and livestreams on a lit soundstage inside the restored barn.</p>
+          <span class="go arrow">Events </span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <section class="band" id="reel">
+    <div class="wrap">
+      <div class="stack read">
+        <p class="eyebrow">Finished work</p>
+        <h2>Sessions filmed here</h2>
+        <p class="muted">Every video below was shot and recorded at Dharma Barn. The reel plays here; the full performances open on YouTube.</p>
+      </div>
+      <div style="margin-top:32px">
+        <div class="player" id="reel-player">
+          <video id="reel-video" controls playsinline preload="metadata" poster="img/sizzle-poster.jpg">
+            <source src="media/sizzle-reel.mp4" type="video/mp4">
+          </video>
+          <div class="fallback" hidden style="background:linear-gradient(var(--scrim),var(--scrim)),url(img/sizzle-poster.jpg) center/cover">
+            <p class="eyebrow">This video can't play here</p>
+            <a class="btn btn-primary" href="https://www.youtube.com/watch?v=s7iopa9lM4o" target="_blank" rel="noopener">Watch the reel on YouTube</a>
+          </div>
+        </div>
+        <div class="player-cap"><span>Dharma Barn Sizzle Reel · 1:33</span><span>Dan Rodriguez · Desert Hollow · and more</span></div>
+      </div>
+      <div class="clips" data-clips="home"></div>
+    </div>
+  </section>
+
+  <section class="band" style="padding-top:0">
+    <div class="wrap">
+      <div class="split">
+        <div class="ph"><img src="img/mics-lineup.jpg" alt="Four vintage tube microphones laid side by side" loading="lazy" style="aspect-ratio:4/5"><span class="missing">Photo unavailable</span></div>
+        <div class="stack">
+          <p class="eyebrow">Why artists book the barn</p>
+          <h2>Video that sounds as good as it looks</h2>
+          <p class="lead">Most performance videos are made by camera crews. Ours are made by a recording studio that also films.</p>
+          <div class="benefits" style="grid-template-columns:1fr;margin-top:12px;gap:4px">
+            <div class="benefit"><h3>Studio-grade audio</h3><p>Every shoot is multitracked through vintage microphones and discrete preamps, then mixed on the API console.</p></div>
+            <div class="benefit"><h3>A room on camera</h3><p>Timber beams, stage lighting and the 1918 barn give each video its own look, unlike a club or a white studio.</p></div>
+            <div class="benefit"><h3>One crew, start to finish</h3><p>Recording, filming, mixing and editing happen in one place with one team, led by audio/visual director Chris Wright.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="festival band">
+    <div class="bg"><img src="img/barn-moon.jpg" alt="" loading="lazy"></div>
+    <div class="wrap">
+      <div class="stack read">
+        <p class="dateline">Sundance 2027 · January&nbsp;21–31 · Boulder</p>
+        <h2>A private base for festival week</h2>
+        <p class="lead">We are taking inquiries for private screenings, brand hospitality and on-site content capture during the 2027 Festival, at our property in Hygiene.</p>
+        <p style="font-size:15.5px;color:var(--siding);opacity:.85">Dharma Barn is an independent venue and is not affiliated with the Sundance Institute.</p>
+        <div class="btn-row"><a class="btn btn-primary arrow" href="#sundance" data-link>Sundance 2027</a></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ================= RECORDING ================= -->
+<div data-view="recording" hidden>
+  <section class="hero page-hero">
+    <div class="hero-media"><img src="img/console.jpg" alt="API 1608-II console glowing in the dark control room"><span class="missing">Photo unavailable</span></div>
+    <div class="wrap">
+      <p class="eyebrow">Recording &amp; mixing</p>
+      <h1>A world-class signal chain in a barn</h1>
+      <p class="lead">Track a band live on the soundstage, overdub in the room, and mix through analog hardware chosen over decades by audio/visual director Chris Wright.</p>
+      <div class="btn-row"><a class="btn btn-primary arrow" href="#contact" data-link data-type="Recording or mixing">Discuss your project</a></div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
+      <div class="stack read">
+        <p class="eyebrow">Services</p>
+        <h2>What we record</h2>
+      </div>
+      <div class="svc-list">
+        <div><h3>Tracking</h3><p>Full bands live on the soundstage, or instruments and vocals one at a time. Vintage tube microphones into Neve, API and Focusrite preamps.</p></div>
+        <div><h3>Mixing</h3><p>Hybrid analog and digital mixing on the API 1608-II console with Pultec, Manley and Neve processing.</p></div>
+        <div><h3>Mastering</h3><p>A dedicated mastering path through Pultec EQM-1S3 equalizers, the Requisite Audio L2M limiter, Lynx Hilo 2 and SPL Mercury conversion.</p></div>
+        <div><h3>Live and livestream audio</h3><p>Multitrack capture of concerts and livestreams, mixed afterward from the stems so the release sounds finished.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" style="padding-top:0">
+    <div class="wrap">
+      <div class="gal">
+        <figure class="w7 h"><img src="img/rack.jpg" alt="Outboard rack: Manley Variable Mu compressor and Pultec EQM-1S3 equalizer" loading="lazy"><span class="missing">Photo unavailable</span></figure>
+        <figure class="w5 h"><img src="img/mics-stand.jpg" alt="Vintage condenser microphones on stands" loading="lazy" style="object-position:center 30%"><span class="missing">Photo unavailable</span></figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" style="padding-top:0">
+    <div class="wrap">
+      <div class="stack read">
+        <p class="eyebrow">Selected equipment</p>
+        <h2>The gear behind the sound</h2>
+        <p class="muted">A short selection. The full inventory is listed below.</p>
+      </div>
+      <div class="gear">
+        <div><span class="cat">Tube microphone</span><span class="model">Neumann U 47</span><span class="why">Vintage, with the VF14 tube and M7 capsule.</span></div>
+        <div><span class="cat">Tube microphone</span><span class="model">Telefunken ELA&nbsp;M&nbsp;251&nbsp;E</span><span class="why">A classic vocal microphone.</span></div>
+        <div><span class="cat">Stereo tube microphone</span><span class="model">AKG C24</span><span class="why">Vintage stereo microphone with two C12-type capsules.</span></div>
+        <div><span class="cat">Console</span><span class="model">API 1608-II</span><span class="why">All-discrete analog console for tracking and mixing.</span></div>
+        <div><span class="cat">Preamp &amp; EQ</span><span class="model">Neve 31102</span><span class="why">Vintage Class A console modules, paired with Neve 32264A compressors.</span></div>
+        <div><span class="cat">Tube compressor</span><span class="model">Manley Variable Mu</span><span class="why">Stereo tube compression for mix bus and mastering.</span></div>
+        <div><span class="cat">Tube equalizer</span><span class="model">Pultec EQM-1S3</span><span class="why">A pair of mastering-grade program equalizers.</span></div>
+        <div><span class="cat">Monitoring &amp; conversion</span><span class="model">PMC6-2 · Antelope</span><span class="why">PMC6-2 reference monitors; Antelope Orion 32+ Gen 4 conversion clocked by a 10MX atomic clock.</span></div>
+      </div>
+
+      <details class="inv" id="inventory">
+        <summary>Full equipment inventory</summary>
+        <div class="inv-grid">
+          <div><h4>Microphones</h4><ul>
+            <li><span>Neumann U 47 (VF14, M7)</span><span>vintage</span></li>
+            <li><span>Telefunken ELA M 251 E</span><span>1</span></li>
+            <li><span>Neumann U 67</span><span>1</span></li>
+            <li><span>Neumann SM 2 stereo (KM 56)</span><span>vintage</span></li>
+            <li><span>Neumann KM 56</span><span>vintage</span></li>
+            <li><span>AKG C24 stereo</span><span>vintage</span></li>
+            <li><span>Neumann KM 140</span><span>×2</span></li>
+            <li><span>Schoeps CMC 6</span><span>×2</span></li>
+            <li><span>Royer R-121 ribbon</span><span>1</span></li>
+            <li><span>Sennheiser MD 421</span><span>×2</span></li>
+            <li><span>Sennheiser MD 409</span><span>×2 vintage</span></li>
+            <li><span>Shure SM57</span><span>×8</span></li>
+            <li><span>Shure SM58</span><span>×8</span></li>
+          </ul></div>
+          <div><h4>Console &amp; preamps</h4><ul>
+            <li><span>API 1608-II console</span><span>1</span></li>
+            <li><span>API 212L preamp</span><span>×8</span></li>
+            <li><span>API 512 preamp</span><span>×16</span></li>
+            <li><span>Neve 31102 pre/EQ</span><span>×2 vintage</span></li>
+            <li><span>Focusrite ISA 115HD</span><span>×2</span></li>
+            <li><span>Focusrite ISA preamp</span><span>×8</span></li>
+            <li><span>Requisite Audio PAL</span><span>×2</span></li>
+          </ul>
+          <h4 style="margin-top:22px">Equalizers</h4><ul>
+            <li><span>Pultec EQM-1S3</span><span>×2</span></li>
+            <li><span>Pultec MEQM-5</span><span>×2</span></li>
+            <li><span>API 550</span><span>×4 vintage</span></li>
+            <li><span>API 550A</span><span>×8</span></li>
+            <li><span>API 550b</span><span>×2</span></li>
+          </ul></div>
+          <div><h4>Dynamics</h4><ul>
+            <li><span>Manley Variable Mu</span><span>1</span></li>
+            <li><span>Neve 32264A</span><span>×2 vintage</span></li>
+            <li><span>AMS Neve 2264ALB</span><span>×2</span></li>
+            <li><span>Empirical Labs EL8 Distressor</span><span>×2</span></li>
+            <li><span>Vertigo Sound VSC-3</span><span>1</span></li>
+            <li><span>ADR Compex F760X-RS</span><span>vintage</span></li>
+            <li><span>Requisite Audio L2M limiter</span><span>1</span></li>
+          </ul>
+          <h4 style="margin-top:22px">Effects, conversion &amp; monitoring</h4><ul>
+            <li><span>Eventide H8000</span><span>1</span></li>
+            <li><span>Moog analog delay</span><span>1</span></li>
+            <li><span>Antelope Orion 32+ Gen 4</span><span>32 I/O</span></li>
+            <li><span>Antelope 10MX atomic clock</span><span>1</span></li>
+            <li><span>Lynx Hilo 2</span><span>1</span></li>
+            <li><span>SPL Mercury D/A</span><span>1</span></li>
+            <li><span>PMC6-2 monitors + sub extension</span><span>pair</span></li>
+          </ul></div>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <section class="cta-band"><div class="wrap"><h2 style="max-width:18ch">Have a record in mind?</h2><a class="btn btn-primary arrow" href="#contact" data-link data-type="Recording or mixing">Discuss your project</a></div></section>
+</div>
+
+<!-- ================= VIDEO ================= -->
+<div data-view="video" hidden>
+  <section class="hero page-hero">
+    <div class="hero-media"><img src="img/stage-teal.jpg" alt="The soundstage lit teal with drum kit and amplifiers set up"><span class="missing">Photo unavailable</span></div>
+    <div class="wrap">
+      <p class="eyebrow">Video production</p>
+      <h1>Performance video with studio sound</h1>
+      <p class="lead">Multi-camera concert films, EPKs and social content shot on the barn soundstage, with the audio recorded and mixed like a record.</p>
+      <div class="btn-row"><a class="btn btn-primary arrow" href="#contact" data-link data-type="Live session (audio + video)">Discuss your project</a><a class="btn btn-ghost" href="#video-reel">Watch the work</a></div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
+      <div class="stack read"><p class="eyebrow">Services</p><h2>What we film</h2></div>
+      <div class="svc-list">
+        <div><h3>Live multi-camera video</h3><p>Concert videos captured from several angles at once on Sony professional cameras and lenses, under professional stage lighting.</p></div>
+        <div><h3>EPKs and social content</h3><p>Performance clips sized for press kits, YouTube and social channels.</p></div>
+        <div><h3>Apple Immersive Video</h3><p>3D immersive shoots for artists who want to reach fans on Apple Vision Pro.</p></div>
+        <div><h3>Editing</h3><p>Finished cuts with color, graphics and pacing that follows the music.</p></div>
+        <div><h3>Multitrack audio for film</h3><p>Every camera angle is matched to a multitrack recording, mixed and mastered on the API console and outboard racks.</p></div>
+        <div><h3>Live sessions</h3><p>Record and film a band in one day: multitrack audio, multi-camera video, then a mixed and edited release.</p></div>
+        <div><h3>Interviews and podcasts</h3><p>Seated interviews, panels and podcasts recorded with the same cameras and microphones.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="video-reel" style="padding-top:0">
+    <div class="wrap">
+      <div class="stack read"><p class="eyebrow">Finished work</p><h2>Watch the sessions</h2></div>
+      <div class="clips" data-clips="all"></div>
+    </div>
+  </section>
+
+  <section class="band" style="padding-top:0">
+    <div class="wrap">
+      <div class="gal">
+        <figure class="w4 t"><img src="img/camera-op.jpg" alt="Camera operator on the soundstage" loading="lazy"><span class="missing">Photo unavailable</span></figure>
+        <figure class="w8 h"><img src="img/stage-drums.jpg" alt="Drum kit set up on the lit stage" loading="lazy"><span class="missing">Photo unavailable</span></figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-band"><div class="wrap"><h2 style="max-width:18ch">Planning a shoot?</h2><a class="btn btn-primary arrow" href="#contact" data-link data-type="Video production">Discuss your project</a></div></section>
+</div>
+
+<!-- ================= EVENTS ================= -->
+<div data-view="events" hidden>
+  <section class="hero page-hero">
+    <div class="hero-media"><img src="img/crowd.jpg" alt="Guests gathered in the barn during a show" style="object-position:center 35%"><span class="missing">Photo unavailable</span></div>
+    <div class="wrap">
+      <p class="eyebrow">Events &amp; venue</p>
+      <h1>Live at Dharma Barn</h1>
+      <p class="lead">Listening-room concerts, private gatherings and rehearsals in a restored 1918 barn with a lit stage and a full sound system.</p>
+      <div class="btn-row"><a class="btn btn-primary arrow" href="#contact" data-link data-type="Event or venue">Discuss your event</a></div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
+      <div class="svc-list" style="margin-top:0">
+        <div><h3>Concerts</h3><p>Intimate shows on the soundstage. Many are filmed and recorded for release.</p></div>
+        <div><h3>Private gatherings</h3><p>Dinners, celebrations and receptions in the barn, with the stage and lighting available.</p></div>
+        <div><h3>Rehearsals</h3><p>Prepare a set on a real stage with professional sound before a tour or a show.</p></div>
+        <div><h3>Livestreams</h3><p>Broadcast a performance or event with multi-camera video and a proper audio mix.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" style="padding-top:0">
+    <div class="wrap">
+      <div class="gal">
+        <figure class="w8 h"><img src="img/fiddle-show.jpg" alt="Fiddle player and guitarist performing in the barn" loading="lazy"><span class="missing">Photo unavailable</span></figure>
+        <figure class="w4 t"><img src="img/dinner-room.jpg" alt="Round dinner tables set under timber beams" loading="lazy"><span class="missing">Photo unavailable</span></figure>
+        <figure class="w6 h"><img src="img/buffet.jpg" alt="Catered buffet laid out in the barn" loading="lazy"><span class="missing">Photo unavailable</span></figure>
+        <figure class="w6 h"><img src="img/stage-sparkle.jpg" alt="Stage lit with sparkling lights" loading="lazy"><span class="missing">Photo unavailable</span></figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" style="padding-top:0">
+    <div class="wrap">
+      <div class="stack read">
+        <p class="eyebrow">Recent shows</p>
+        <h2>On the barn stage</h2>
+        <p class="muted">Follow <a href="https://www.instagram.com/dharma_farm_/" target="_blank" rel="noopener">@dharma_farm_</a> on Instagram for news from the barn.</p>
+      </div>
+      <div class="shows">
+        <div class="show"><span class="when">Sept 2026</span><span class="who">Reed Foehl</span><a href="https://www.youtube.com/watch?v=ta1Johw1Sdk" target="_blank" rel="noopener">Watch ↗</a></div>
+        <div class="show"><span class="when">Recent</span><span class="who">Covenhoven</span><span></span></div>
+        <div class="show"><span class="when">Filmed here</span><span class="who">Dan Rodriguez</span><a href="https://www.youtube.com/watch?v=Kzf7ts125BI" target="_blank" rel="noopener">Watch ↗</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-band"><div class="wrap"><h2 style="max-width:18ch">Planning an event?</h2><a class="btn btn-primary arrow" href="#contact" data-link data-type="Event or venue">Discuss your event</a></div></section>
+</div>
+
+<!-- ================= SUNDANCE ================= -->
+<div data-view="sundance" hidden>
+  <section class="hero page-hero">
+    <div class="hero-media"><img src="img/barn-dusk.jpg" alt="The white barn at dusk with lit windows"><span class="missing">Photo unavailable</span></div>
+    <div class="wrap">
+      <p class="dateline" style="margin-bottom:18px">Sundance Film Festival 2027 · January&nbsp;21–31 · Boulder,&nbsp;Colorado</p>
+      <h1>Private production &amp; hospitality for festival week</h1>
+      <p class="lead">A private barn property in Hygiene, near Longmont, with a soundstage, a recording studio and a multi-camera video crew on site.</p>
+      <p class="muted" style="font-size:15.5px;margin-top:12px">Independent venue · not affiliated with the Sundance Institute</p>
+      <div class="btn-row"><a class="btn btn-primary arrow" href="#contact" data-link data-type="Sundance 2027">Discuss your Sundance plans</a></div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
+      <div class="stack read">
+        <p class="eyebrow">What you can do here</p>
+        <h2>Three ways to use the barn</h2>
+        <p class="muted">Each inquiry is planned around your dates, guests and goals. Availability and terms are confirmed directly.</p>
+      </div>
+      <div class="pkgs">
+        <article class="pkg">
+          <div class="ph"><img src="img/stage-wide.jpg" alt="Soundstage set with lounge seating" loading="lazy"><span class="missing">Photo unavailable</span></div>
+          <div class="body"><p class="eyebrow">Screenings &amp; gatherings</p><h3>Private screenings</h3>
+            <ul><li>Invite-only screenings and filmmaker Q&amp;As</li><li>Cast and crew gatherings</li><li>Distributor and press previews</li></ul></div>
+        </article>
+        <article class="pkg">
+          <div class="ph"><img src="img/buffet.jpg" alt="Catered table set in the barn" loading="lazy"><span class="missing">Photo unavailable</span></div>
+          <div class="body"><p class="eyebrow">Brands &amp; hospitality</p><h3>Brand activations</h3>
+            <ul><li>Sponsor lounges and receptions</li><li>Product launches, tastings and demos</li><li>VIP hospitality, with the event captured on video</li></ul></div>
+        </article>
+        <article class="pkg">
+          <div class="ph"><img src="img/camera-op.jpg" alt="Camera operator at work" loading="lazy" style="object-position:center 25%"><span class="missing">Photo unavailable</span></div>
+          <div class="body"><p class="eyebrow">Audio &amp; video capture</p><h3>Content production</h3>
+            <ul><li>Filmmaker and cast interviews, podcasts and panels</li><li>Live performances and livestreams</li><li>Multitrack audio, editing and delivery of finished assets</li></ul></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" style="padding-top:0">
+    <div class="wrap">
+      <div class="stack read"><p class="eyebrow">Plan with the facts</p><h2>Where we are</h2></div>
+      <div class="facts">
+        <div><span class="k">Festival</span><span class="v">Jan 21–31, 2027</span><span class="s">In Boulder, Colorado. World premieres Jan 21–26. Source: sundance.org.</span></div>
+        <div><span class="k">Location</span><span class="v">Hygiene, CO</span><span class="s">12281 N 75th St, Longmont, CO 80503. Unincorporated Boulder County, outside the City of Boulder and the Festival's downtown footprint.</span></div>
+        <div><span class="k">On site</span><span class="v">Stage · studio · cameras</span><span class="s">Soundstage with stage lighting, a recording studio and multi-camera video production in one place.</span></div>
+      </div>
+      <p class="disclaim" style="margin-top:32px">Dharma Barn is an independent private venue. It is not affiliated with, endorsed by or part of the Sundance Institute or the Sundance Film Festival.</p>
+    </div>
+  </section>
+
+  <section class="cta-band"><div class="wrap"><h2 style="max-width:20ch">Bring your festival week to the barn</h2><a class="btn btn-primary arrow" href="#contact" data-link data-type="Sundance 2027">Discuss your Sundance plans</a></div></section>
+</div>
+
+<!-- ================= CONTACT ================= -->
+<div data-view="contact" hidden>
+  <section class="band" style="padding-bottom:clamp(48px,6vw,80px)">
+    <div class="wrap">
+      <div class="stack read">
+        <p class="eyebrow loc">Hygiene · Longmont · Boulder County</p>
+        <h1 style="font-size:clamp(44px,7vw,92px)">Discuss your project</h1>
+        <p class="lead">Tell us what you're planning. We'll reply to talk through dates, scope and what the barn can do for it.</p>
+      </div>
+
+      <div class="contact-grid">
+        <div>
+          <form class="inq" id="inq" novalidate>
+            <div class="fld"><label for="f-name">Name</label><input id="f-name" name="name" autocomplete="name" required><span class="err">Please add your name.</span></div>
+            <div class="fld"><label for="f-email">Email</label><input id="f-email" name="email" type="email" autocomplete="email" required><span class="err">Please add an email address we can reply to.</span></div>
+            <div class="fld"><label for="f-phone">Phone (optional)</label><input id="f-phone" name="phone" type="tel" autocomplete="tel"></div>
+            <div class="fld"><label for="f-when">Dates or timing (optional)</label><input id="f-when" name="when" placeholder="e.g. late January, or flexible"></div>
+            <fieldset class="fld full chips" id="f-type">
+              <legend>What is it?</legend>
+              <label><input type="radio" name="type" value="Recording or mixing"> Recording or mixing</label>
+              <label><input type="radio" name="type" value="Video production"> Video production</label>
+              <label><input type="radio" name="type" value="Live session (audio + video)"> Live session (audio + video)</label>
+              <label><input type="radio" name="type" value="Event or venue"> Event or venue</label>
+              <label><input type="radio" name="type" value="Sundance 2027"> Sundance 2027</label>
+              <label><input type="radio" name="type" value="Something else"> Something else</label>
+              <span class="err" style="width:100%">Please choose the closest option.</span>
+            </fieldset>
+            <div class="fld full"><label for="f-msg">About your project</label><textarea id="f-msg" name="msg" required placeholder="Artist or company, what you'd like to make, rough size of the group, links to your music or past work"></textarea><span class="err">A sentence or two helps us reply usefully.</span></div>
+            <div class="fld full"><button class="btn btn-primary arrow" type="submit" style="justify-self:start">Send inquiry</button></div>
+          </form>
+          <div class="sent" id="sent" hidden role="status" aria-live="polite">
+            <p class="eyebrow" style="color:var(--tungsten)">One more step</p>
+            <p>Your email app should open with this inquiry addressed to dharmafarm@icloud.com. Press send there to reach us. If it didn't open, copy the inquiry below and email it, or call one of the numbers on this page.</p>
+            <div class="btn-row"><a class="btn btn-primary" id="mail-inq" href="mailto:dharmafarm@icloud.com">Open email again</a></div>
+            <pre id="sent-text"></pre>
+            <div class="btn-row"><button class="btn btn-ghost" type="button" id="copy-inq">Copy inquiry</button><button class="btn btn-ghost" type="button" id="edit-inq">Edit</button></div>
+          </div>
+        </div>
+
+        <aside>
+          <div class="people">
+            <div class="person"><span class="role">Recording &amp; video production</span><span class="name">Chris Wright</span>
+              <span class="copyable"><a href="tel:+17208785459">(720) 878-5459</a><button class="copy" type="button" data-copy="(720) 878-5459">Copy</button></span></div>
+            <div class="person"><span class="role">Venue &amp; events</span><span class="name">Jeremy Ragland</span>
+              <span class="copyable"><a href="tel:+13038081091">(303) 808-1091</a><button class="copy" type="button" data-copy="(303) 808-1091">Copy</button></span>
+              <span class="copyable"><a href="mailto:dharmafarm@icloud.com">dharmafarm@icloud.com</a><button class="copy" type="button" data-copy="dharmafarm@icloud.com">Copy</button></span></div>
+            <div class="person"><span class="role">Address</span>
+              <span class="copyable" style="font-family:var(--f-body)">12281 N 75th St<br>Longmont, CO 80503</span>
+              <span class="muted" style="font-size:15.5px">In Hygiene, unincorporated Boulder County.</span>
+              <span class="copyable"><a href="https://maps.google.com/?q=12281+N+75th+St,+Longmont,+CO+80503" target="_blank" rel="noopener">Open in Maps ↗</a></span></div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+</div>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="stack-sm">
+        <a class="mark" href="#home" data-link>Dharma <span>Barn</span></a>
+        <p>Recording studio, soundstage and private venue in a 1918 barn.</p>
+        <p>12281 N 75th St, Longmont, CO 80503<br>Hygiene · Boulder County, Colorado</p>
+      </div>
+      <div><h4>Explore</h4><ul><li><a href="#recording" data-link>Recording</a></li><li><a href="#video" data-link>Video</a></li><li><a href="#events" data-link>Events</a></li><li><a href="#sundance" data-link>Sundance</a></li><li><a href="#contact" data-link>Contact</a></li></ul></div>
+      <div><h4>Call</h4><ul><li>Production · Chris Wright · (720) 878-5459</li><li>Venue · Jeremy Ragland · (303) 808-1091</li></ul></div>
+      <div><h4>Follow</h4><ul>
+        <li><a href="https://www.youtube.com/@dharma_barn" target="_blank" rel="noopener">YouTube ↗</a></li>
+        <li><a href="https://www.instagram.com/dharma_farm_/" target="_blank" rel="noopener">Instagram ↗</a></li>
+        <li><a href="https://www.facebook.com/p/Dharma-Farm-100095685273767/" target="_blank" rel="noopener">Facebook ↗</a></li>
+      </ul></div>
+    </div>
+    <p class="fine">© 2026 Dharma Barn. Dharma Barn is an independent venue and is not affiliated with the Sundance Institute or the Sundance Film Festival.</p>
+  </div>
+</footer>
+
+
+<script>
+(function(){
+  var CLIPS=[
+    {id:"ta1Johw1Sdk",t:"Reed Foehl",s:"Live at Dharma Barn · 2026"},
+    {id:"mR_TFoWGO_8",t:"Shook Twins",s:"Live at Dharma Barn"},
+    {id:"Ho9cJo9Uzxo",t:"Desert Hollow",s:"Live at Dharma Barn"},
+    {id:"Kzf7ts125BI",t:"Dan Rodriguez",s:"Live at Dharma Barn"},
+    {id:"0YeE4sCtIh8",t:"Shook Twins · “Coffee”",s:"Sylvan Esso cover"},
+    {id:"DSFyvuu2VrA",t:"Dan Rodriguez · “Wild Horse”",s:"Live at Dharma Barn"},
+    {id:"DnW5WuU5-Tc",t:"Neil Sullivan",s:"Live at Dharma Barn"},
+    {id:"s7iopa9lM4o",t:"Dharma Barn Sizzle Reel",s:"Highlights · 1:33"}
+  ];
+  function clipHTML(c){
+    return '<a class="clip" href="https://www.youtube.com/watch?v='+c.id+'" target="_blank" rel="noopener" aria-label="Watch '+c.t.replace(/"/g,'')+' on YouTube">'+
+      '<div class="th"><img src="img/yt-'+c.id+'.jpg" alt="" loading="lazy"><span class="missing">Thumbnail unavailable</span></div>'+
+      '<strong>'+c.t+'</strong><small>'+c.s+' · YouTube ↗</small></a>';
+  }
+  document.querySelectorAll('[data-clips]').forEach(function(el){
+    var list=el.dataset.clips==="home"?CLIPS.slice(0,4):CLIPS;
+    el.innerHTML=list.map(clipHTML).join('');
+  });
+
+  /* Missing image state */
+  function markMissing(img){var p=img.parentElement; if(p) p.classList.add('is-missing');}
+  function watchImg(img){ if(img.complete && img.naturalWidth===0 && img.getAttribute('src')) markMissing(img); img.addEventListener('error',function(){markMissing(img)}); }
+  document.querySelectorAll('img').forEach(watchImg);
+
+  /* Hero loop: play muted unless reduced motion; fall back to poster */
+  var hv=document.getElementById('hero-video');
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(hv){
+    if(!reduce){ var p=hv.play(); if(p&&p.catch) p.catch(function(){}); }
+  }
+
+  /* Reel player: show YouTube fallback if the file can't play */
+  var rv=document.getElementById('reel-video');
+  if(rv){
+    var showFallback=function(){ rv.hidden=true; rv.parentElement.querySelector('.fallback').hidden=false; };
+    rv.querySelector('source').addEventListener('error',showFallback);
+    rv.addEventListener('error',showFallback);
+  }
+
+  /* Router */
+  var views=[].slice.call(document.querySelectorAll('[data-view]'));
+  var names=views.map(function(v){return v.dataset.view});
+  var nav=document.getElementById('nav'), mb=document.getElementById('menu-btn');
+  function route(push){
+    var h=(location.hash||'').replace('#','');
+    var target=names.indexOf(h)>=0?h:null;
+    var anchor=null;
+    if(!target){ var el=h?document.getElementById(h):null; if(el){ var host=el.closest('[data-view]'); target=host?host.dataset.view:'home'; anchor=el; } else target='home'; }
+    views.forEach(function(v){ v.hidden=v.dataset.view!==target; });
+    document.querySelectorAll('.nav a[data-link]:not(.btn)').forEach(function(a){
+      if(a.getAttribute('href')==='#'+target) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current');
+    });
+    if(rv && target!=='home' && !rv.paused) rv.pause();
+    if(hv && !reduce){ if(target==='home'){var p=hv.play(); if(p&&p.catch)p.catch(function(){});} else hv.pause(); }
+    document.title=(target==='home'?'Dharma Barn':target.charAt(0).toUpperCase()+target.slice(1)+' · Dharma Barn');
+    if(anchor) anchor.scrollIntoView(); else window.scrollTo({top:0,behavior:'instant'});
+    nav.classList.remove('open'); mb.setAttribute('aria-expanded','false');
+  }
+  window.addEventListener('hashchange',function(){route()});
+  mb.addEventListener('click',function(){ var o=nav.classList.toggle('open'); mb.setAttribute('aria-expanded',o?'true':'false'); mb.textContent=o?'Close':'Menu'; });
+  window.addEventListener('hashchange',function(){ mb.textContent='Menu'; });
+
+  function closeMenu(){ nav.classList.remove('open'); mb.setAttribute('aria-expanded','false'); mb.textContent='Menu'; }
+  nav.addEventListener('click',function(e){ if(e.target.closest('a')) closeMenu(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape' && nav.classList.contains('open')){ closeMenu(); mb.focus(); } });
+  /* Preselect inquiry type from CTA */
+  document.addEventListener('click',function(e){
+    var a=e.target.closest('a[href="#contact"]'); if(!a) return;
+    if(!a.dataset.type){ document.querySelectorAll('#f-type input').forEach(function(r){r.checked=false}); return; }
+    var r=document.querySelector('#f-type input[value="'+a.dataset.type+'"]'); if(r) r.checked=true;
+  });
+
+  /* Form */
+  var form=document.getElementById('inq'), sent=document.getElementById('sent');
+  function setBad(el,bad){ el.closest('.fld').classList.toggle('bad',bad); if(bad) el.setAttribute('aria-invalid','true'); else el.removeAttribute('aria-invalid'); }
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    var name=form.name.value.trim(), email=form.email.value.trim(), msg=form.msg.value.trim();
+    var type=(form.querySelector('input[name=type]:checked')||{}).value||'';
+    var okEmail=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
+    setBad(form.name,!name); setBad(form.email,!okEmail); setBad(form.msg,!msg);
+    document.getElementById('f-type').classList.toggle('bad',!type);
+    var first=form.querySelector('.bad input, .bad textarea');
+    if(!name||!okEmail||!msg||!type){ if(first) first.focus(); return; }
+    var txt='Project inquiry: '+type+'\n\nName: '+name+'\nEmail: '+email+(form.phone.value.trim()?'\nPhone: '+form.phone.value.trim():'')+(form.when.value.trim()?'\nTiming: '+form.when.value.trim():'')+'\n\n'+msg;
+    document.getElementById('sent-text').textContent=txt;
+    var href='mailto:dharmafarm@icloud.com?subject='+encodeURIComponent('Project inquiry: '+type+' ('+name+')')+'&body='+encodeURIComponent(txt);
+    document.getElementById('mail-inq').setAttribute('href',href);
+    form.hidden=true; sent.hidden=false; sent.scrollIntoView({block:'center'});
+    window.location.href=href;
+  });
+  form.addEventListener('input',function(e){ var f=e.target.closest('.fld'); if(f&&f.classList.contains('bad')) f.classList.remove('bad'); });
+  document.getElementById('edit-inq').addEventListener('click',function(){ sent.hidden=true; form.hidden=false; form.name.focus(); });
+
+  function copyText(t,btn){
+    var done=function(){ var o=btn.textContent; btn.textContent='Copied'; setTimeout(function(){btn.textContent=o},1600); };
+    try{ navigator.clipboard.writeText(t).then(done,function(){ fallbackSel(btn); }); }catch(_){ fallbackSel(btn); }
+  }
+  function fallbackSel(btn){ var n=btn.closest('.sent')?document.getElementById('sent-text'):btn.previousElementSibling; var r=document.createRange(); r.selectNodeContents(n); var s=getSelection(); s.removeAllRanges(); s.addRange(r); btn.textContent='Selected · press copy'; }
+  document.getElementById('copy-inq').addEventListener('click',function(){ copyText(document.getElementById('sent-text').textContent,this); });
+  document.querySelectorAll('.copy').forEach(function(b){ b.addEventListener('click',function(){ copyText(b.dataset.copy,b); }); });
+
+  route();
+})();
+</script>
+
+</body>
+</html>
