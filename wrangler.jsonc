@@ -11,5 +11,11 @@
     "binding": "ASSETS",
     "run_worker_first": ["/media/*"]
   },
+  "workers_dev": true,
+  "preview_urls": false,
+  "routes": [
+    { "pattern": "dharmabarn.com", "custom_domain": true },
+    { "pattern": "www.dharmabarn.com", "custom_domain": true }
+  ],
   "observability": { "enabled": false }
 }
