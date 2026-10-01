@@ -325,7 +325,15 @@ form.inq{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
 @media (min-width:701px){.gal .t{aspect-ratio:auto}}
 .page-hero .wrap{padding-block:clamp(28px,4vw,56px)}
 .hero + .band{padding-top:clamp(40px,5vw,80px)}
-@media (max-width:700px){.hero-media video{object-position:28% center}}
+.hero-media video{object-position:50% 30%}
+@media (max-width:700px){.hero-media video{object-position:54% 50%}}
+/* Home hero: lighter overlay so the performance shows; darkest only behind the text */
+.hero:not(.page-hero)::after{background:linear-gradient(90deg,rgba(var(--night-rgb),.5) 0%,rgba(var(--night-rgb),.18) 55%,rgba(var(--night-rgb),.08) 100%),linear-gradient(180deg,rgba(var(--night-rgb),0) 45%,rgba(var(--night-rgb),.7) 85%,var(--night) 100%)}
+@media (max-width:700px){.hero:not(.page-hero)::after{background:linear-gradient(180deg,rgba(var(--night-rgb),.12) 0%,rgba(var(--night-rgb),.1) 40%,rgba(var(--night-rgb),.78) 78%,var(--night) 100%)}}
+.hero .name,.hero .place,.hero-desc{text-shadow:0 1px 18px rgba(0,0,0,.6)}
+.hero-desc{margin-top:16px;max-width:36ch;font-size:clamp(17px,.8vw + 13px,20px);line-height:1.5;color:var(--siding)}
+.hero-link{margin-top:14px;font-family:var(--f-ui);font-size:14px;letter-spacing:.06em}
+.hero-link .textlink{text-shadow:none}
 .clip .th img{scale:1.12}
 .clip:hover .th img{transform:scale(1.04)}
 body[data-view="contact"] .foot-contact{display:none}
@@ -337,6 +345,23 @@ a[href^="tel:"]{white-space:nowrap}
 .clip:hover .th::after,.clip:focus-visible .th::after{opacity:1}
 @media (hover:none){.clip .th::after{opacity:.85}}
 @media (max-width:860px){.small-head{margin-top:32px}}
+
+
+/* Sundance packages (2026-10-01) */
+.pkgs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(16px,2vw,28px);margin-top:clamp(28px,4vw,44px)}
+@media (max-width:900px){.pkgs{grid-template-columns:1fr}}
+.pkg{display:flex;flex-direction:column;background:var(--loft);border:1px solid var(--line);border-top:2px solid color-mix(in srgb,var(--tungsten) 55%,transparent);min-width:0}
+.pkg-ph{position:relative;margin:0;aspect-ratio:4/3;overflow:hidden;background:var(--night)}
+.pkg-ph img{width:100%;height:100%;object-fit:cover}
+.pkg-ph figcaption{position:absolute;left:0;right:0;bottom:0;padding:22px 14px 10px;font-size:13px;color:var(--siding);background:linear-gradient(transparent,rgba(var(--night-rgb),.85))}
+.pkg-body{padding:clamp(18px,2vw,26px);display:flex;flex-direction:column;gap:12px;flex:1}
+.pkg h3{font-size:clamp(22px,1.8vw,26px);font-weight:400;color:var(--siding)}
+.pkg-who{color:var(--siding);opacity:.92;font-size:16.5px;line-height:1.5}
+.pkg-list{list-style:none;margin:4px 0 0;padding:0;display:flex;flex-direction:column;gap:0;font-size:16px;color:var(--siding)}
+.pkg-list li{padding-block:8px;border-top:1px solid var(--line)}
+.pkg-list li::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--tungsten);margin:0 12px 2px 0;vertical-align:middle}
+.pkg-ask{margin-top:auto;padding-top:12px;font-size:16px}
+.pkg-phone{color:var(--dust)}
 
 /* Preview bar + review notes (not part of the live site) */
 .pbar{position:fixed;left:0;right:0;bottom:0;z-index:60;background:var(--loft);border-top:1px solid color-mix(in srgb,var(--tungsten) 45%,transparent);color:var(--siding);padding:10px var(--gutter) calc(10px + env(safe-area-inset-bottom,0px));display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 16px;font-family:var(--f-ui);font-size:12.5px;letter-spacing:.04em}
@@ -368,14 +393,16 @@ body.notes .rn::before{content:"Review note · ";font-weight:500}
 <div data-view="home">
   <section class="hero">
     <div class="hero-media">
-      <video id="hero-video" muted loop playsinline preload="metadata" poster="img/barn-dusk.jpg" aria-hidden="true">
-        <source src="media/hero-loop.mp4" type="video/mp4">
+      <video id="hero-video" muted loop playsinline preload="metadata" poster="img/hero-wildhorse.jpg" aria-hidden="true">
+        <source src="media/hero-wildhorse.mp4" type="video/mp4">
       </video>
       <span class="missing">Video unavailable</span>
     </div>
     <div class="wrap">
       <h1 class="name">Dharma Barn</h1>
       <p class="place">Hygiene, Colorado</p>
+      <p class="hero-desc">Recording, live music films, and intimate events in a historic Colorado barn.</p>
+      <p class="hero-link"><a class="textlink" href="#contact" data-link>Plan a session</a></p>
     </div>
   </section>
 
@@ -427,7 +454,7 @@ body.notes .rn::before{content:"Review note · ";font-weight:500}
 
   <section class="band quiet">
     <div class="wrap">
-      <p class="aside">The Sundance Film Festival comes to Boulder in January 2027. We're hosting a few private screenings and gatherings at the barn that week. <a class="textlink" href="#sundance" data-link>More about that</a>.</p>
+      <p class="aside">The Sundance Film Festival comes to Boulder in January 2027. We're offering the barn for private screenings, brand events and recorded sessions that week. <a class="textlink" href="#sundance" data-link>More about that</a>.</p>
     </div>
   </section>
 </div>
@@ -595,14 +622,40 @@ body.notes .rn::before{content:"Review note · ";font-weight:500}
   </section>
 
   <section class="band">
-    <div class="wrap split">
+    <div class="wrap">
       <div class="prose">
-        <p>The Sundance Film Festival moves to Boulder for 2027, from January 21 to 31. The barn is in Hygiene, outside the city and away from the downtown venues.</p>
-        <p>That week we'll host a few private screenings, dinners and recorded sessions here.</p>
-        <p>If you're planning something, write to Jeremy Ragland at <a class="textlink" href="mailto:dharmafarm@icloud.com">dharmafarm@icloud.com</a> or call <a class="textlink" href="tel:+13038081091">(303) 808-1091</a>.</p>
-        <p class="fine-print">Dharma Barn is independent and isn't affiliated with the Sundance Institute or the Sundance Film Festival. Festival dates from sundance.org.</p>
+        <p>The Sundance Film Festival moves to Boulder for 2027, from January 21 to 31. The barn is in Hygiene, outside the city and away from the downtown venues. That week we're offering it in three ways.</p>
       </div>
-      <figure class="ph tall"><img src="img/stage-wide.jpg" alt="The stage set with lounge seating" loading="lazy"><span class="missing">Photo unavailable</span></figure>
+      <div class="pkgs">
+        <article class="pkg">
+          <figure class="pkg-ph ph"><img src="img/stage-wide.jpg" alt="The barn stage room with lounge seating" loading="lazy"><span class="missing">Photo unavailable</span><figcaption>The stage room, shown as set for a concert</figcaption></figure>
+          <div class="pkg-body">
+            <h3>Private Screening</h3>
+            <p class="pkg-who">For filmmakers and distributors who want a private room for their film.</p>
+            <ul class="pkg-list"><li>Invite-only screenings</li><li>Filmmaker Q&amp;As</li><li>Distributor previews</li><li>Cast-and-crew gatherings</li></ul>
+            <p class="pkg-ask"><a class="textlink" href="mailto:dharmafarm@icloud.com?subject=Private%20Screening%2C%20Sundance%202027">Ask Jeremy about this</a> <span class="pkg-phone">or call <a class="textlink" href="tel:+13038081091">(303)&nbsp;808-1091</a></span></p>
+          </div>
+        </article>
+        <article class="pkg">
+          <figure class="pkg-ph ph"><img src="img/dinner-room.jpg" alt="Round tables set under the barn's timber beams" loading="lazy"><span class="missing">Photo unavailable</span><figcaption>The barn set for a private dinner</figcaption></figure>
+          <div class="pkg-body">
+            <h3>Brand &amp; Product Activation</h3>
+            <p class="pkg-who">For brands and sponsors hosting guests during festival week.</p>
+            <ul class="pkg-list"><li>Sponsor lounges</li><li>Product launches</li><li>VIP hospitality</li><li>Private receptions</li><li>Multi-day brand takeovers</li></ul>
+            <p class="pkg-ask"><a class="textlink" href="mailto:dharmafarm@icloud.com?subject=Brand%20%26%20Product%20Activation%2C%20Sundance%202027">Ask Jeremy about this</a> <span class="pkg-phone">or call <a class="textlink" href="tel:+13038081091">(303)&nbsp;808-1091</a></span></p>
+          </div>
+        </article>
+        <article class="pkg">
+          <figure class="pkg-ph ph"><img src="img/stage-drums.jpg" alt="The barn stage with a band's gear set up under coloured light" loading="lazy"><span class="missing">Photo unavailable</span><figcaption>The barn stage, set up for a band</figcaption></figure>
+          <div class="pkg-body">
+            <h3>Audio/Visual Capture</h3>
+            <p class="pkg-who">For anyone who wants their festival conversations and performances recorded.</p>
+            <ul class="pkg-list"><li>Interviews</li><li>Podcasts</li><li>Livestreams</li><li>Live performances</li><li>Social content</li><li>Recap videos</li></ul>
+            <p class="pkg-ask"><a class="textlink" href="mailto:dharmafarm@icloud.com?subject=Audio%2FVisual%20Capture%2C%20Sundance%202027">Ask Jeremy about this</a> <span class="pkg-phone">or call <a class="textlink" href="tel:+13038081091">(303)&nbsp;808-1091</a></span></p>
+          </div>
+        </article>
+      </div>
+      <p class="fine-print" style="margin-top:32px">Dharma Barn is independent and isn't affiliated with the Sundance Institute or the Sundance Film Festival. Festival dates from sundance.org.</p>
     </div>
   </section>
 </div>
