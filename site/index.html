@@ -137,6 +137,10 @@ section.band{padding-block:clamp(64px,9vw,128px)}
 .player{position:relative;background:#000;aspect-ratio:16/9;width:100%;overflow:hidden}
 .player video{width:100%;height:100%;object-fit:contain;background:#000}
 .player .fallback{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:24px;background:linear-gradient(var(--scrim),var(--scrim)),var(--loft) center/cover}
+.yt-facade{position:absolute;inset:0;width:100%;height:100%;padding:0;border:0;cursor:pointer;background:#000}
+.yt-facade img{width:100%;height:100%;object-fit:cover}
+.yt-play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:76px;height:76px;border-radius:50%;display:grid;place-items:center;padding-left:6px;font-size:26px;background:var(--tungsten);color:var(--accent-ink);box-shadow:0 6px 30px rgba(0,0,0,.45)}
+.yt-facade:hover .yt-play{filter:brightness(1.1)}
 .player-cap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 20px;margin-top:14px;font-family:var(--f-ui);font-size:13px;letter-spacing:.06em;color:var(--dust)}
 .clips{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(14px,2vw,24px);margin-top:28px}
 @media (max-width:1000px){.clips{grid-template-columns:repeat(2,minmax(0,1fr))}}
@@ -361,9 +365,10 @@ body.notes .rn::before{content:"Review note · ";font-weight:500}
       </div>
       <div style="margin-top:32px">
         <div class="player" id="reel-player">
-          <video id="reel-video" controls playsinline preload="metadata" poster="img/sizzle-poster.jpg">
-            <source src="media/sizzle-reel.mp4" type="video/mp4">
-          </video>
+          <button class="yt-facade" id="reel-video" type="button" aria-label="Play the Dharma Barn Sizzle Reel">
+            <img src="img/sizzle-poster.jpg" alt="Desert Hollow performing on the Dharma Barn stage">
+            <span class="yt-play" aria-hidden="true">&#9654;</span>
+          </button>
           <div class="fallback" hidden style="background:linear-gradient(var(--scrim),var(--scrim)),url(img/sizzle-poster.jpg) center/cover">
             <p class="eyebrow">This video can't play here</p>
             <a class="btn btn-primary" href="https://www.youtube.com/watch?v=s7iopa9lM4o" target="_blank" rel="noopener">Watch the reel on YouTube</a>
@@ -788,12 +793,16 @@ body.notes .rn::before{content:"Review note · ";font-weight:500}
   }
 
   /* Reel player: show YouTube fallback if the file can't play */
-  var rv=document.getElementById('reel-video');
-  if(rv){
-    var showFallback=function(){ rv.hidden=true; rv.parentElement.querySelector('.fallback').hidden=false; };
-    rv.querySelector('source').addEventListener('error',showFallback);
-    rv.addEventListener('error',showFallback);
-  }
+  var rv=null, reelBox=document.getElementById('reel-player'), reelFacade=document.getElementById('reel-video');
+  function stopReel(){ var f=reelBox.querySelector('iframe'); if(f){ f.remove(); reelFacade.hidden=false; } }
+  reelFacade.addEventListener('click',function(){
+    var f=document.createElement('iframe');
+    f.src='https://www.youtube-nocookie.com/embed/s7iopa9lM4o?autoplay=1&rel=0&playsinline=1';
+    f.title='Dharma Barn Sizzle Reel'; f.allow='autoplay; encrypted-media; picture-in-picture; fullscreen'; f.allowFullscreen=true;
+    f.setAttribute('referrerpolicy','strict-origin-when-cross-origin');
+    f.style.cssText='position:absolute;inset:0;width:100%;height:100%;border:0';
+    reelFacade.hidden=true; reelBox.appendChild(f);
+  });
 
   /* Router */
   var views=[].slice.call(document.querySelectorAll('[data-view]'));
@@ -808,7 +817,7 @@ body.notes .rn::before{content:"Review note · ";font-weight:500}
     document.querySelectorAll('.nav a[data-link]:not(.btn)').forEach(function(a){
       if(a.getAttribute('href')==='#'+target) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current');
     });
-    if(rv && target!=='home' && !rv.paused) rv.pause();
+    if(target!=='home') stopReel();
     if(hv && !reduce){ if(target==='home'){var p=hv.play(); if(p&&p.catch)p.catch(function(){});} else hv.pause(); }
     document.title=(target==='home'?'Dharma Barn':target.charAt(0).toUpperCase()+target.slice(1)+' · Dharma Barn');
     if(anchor) anchor.scrollIntoView(); else window.scrollTo({top:0,behavior:'instant'});

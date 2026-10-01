@@ -1,12 +1,15 @@
 {
-  // Dharma Barn website on Cloudflare (static assets only; no server code).
+  // Dharma Barn website on Cloudflare: static assets, plus worker.js for /media/* byte ranges.
   // Only ./site is published. Build it with build_site.py from the HQ project.
   "name": "dharmabarn",
+  "main": "worker.js",
   "compatibility_date": "2026-10-01",
   "assets": {
     "directory": "./site",
     "not_found_handling": "404-page",
-    "html_handling": "auto-trailing-slash"
+    "html_handling": "auto-trailing-slash",
+    "binding": "ASSETS",
+    "run_worker_first": ["/media/*"]
   },
   "observability": { "enabled": false }
 }
