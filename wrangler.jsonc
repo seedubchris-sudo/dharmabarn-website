@@ -1,0 +1,12 @@
+{
+  // Dharma Barn website on Cloudflare (static assets only; no server code).
+  // Only ./site is published. Build it with build_site.py from the HQ project.
+  "name": "dharmabarn",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./site",
+    "not_found_handling": "404-page",
+    "html_handling": "auto-trailing-slash"
+  },
+  "observability": { "enabled": false }
+}
