@@ -1,0 +1,17 @@
+{
+  // Staging Worker for reviews only: https://dharmabarn-preview.dharmabarn-website.workers.dev
+  // No custom domains. Deploy with: npx wrangler deploy -c wrangler.staging.jsonc
+  "name": "dharmabarn-preview",
+  "main": "worker.js",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./site",
+    "not_found_handling": "404-page",
+    "html_handling": "auto-trailing-slash",
+    "binding": "ASSETS",
+    "run_worker_first": ["/media/*"]
+  },
+  "workers_dev": true,
+  "preview_urls": false,
+  "observability": { "enabled": false }
+}

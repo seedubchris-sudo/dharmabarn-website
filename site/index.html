@@ -24,7 +24,7 @@
   --night:#0f1412;      /* pine-black ground */
   --loft:#18201d;       /* raised surface */
   --siding:#e6e4da;     /* main text */
-  --dust:#9aa49d;       /* muted text */
+  --dust:#b6beb7;       /* muted text (brightened 2026-10-01) */
   --tungsten:#e3a54e;   /* amber: the one accent */
   --accent-ink:#141006;
   --night-rgb:15,20,18; --siding-rgb:230,228,218;
@@ -77,7 +77,7 @@ section.band{padding-block:clamp(64px,9vw,128px)}
 .mark{font-family:var(--f-display);font-weight:500;font-size:17px;letter-spacing:.24em;text-transform:uppercase;text-decoration:none;line-height:1;white-space:nowrap}
 .mark span{color:var(--tungsten)}
 .nav{display:flex;align-items:center;gap:clamp(14px,2vw,30px)}
-.nav a{font-family:var(--f-ui);font-weight:500;font-size:12.5px;letter-spacing:var(--label-track);text-transform:uppercase;text-decoration:none;color:var(--dust);padding-block:8px;border-bottom:2px solid transparent}
+.nav a{font-family:var(--f-ui);font-weight:500;font-size:12.5px;color:color-mix(in srgb,var(--siding) 82%,var(--night)) !important;letter-spacing:var(--label-track);text-transform:uppercase;text-decoration:none;color:var(--dust);padding-block:8px;border-bottom:2px solid transparent}
 .nav a:hover{color:var(--siding)}
 .nav a[aria-current="page"]{color:var(--siding);border-bottom-color:var(--tungsten)}
 .nav .btn{color:var(--accent-ink);padding:11px 16px;min-height:42px;border-bottom:1px solid transparent}
@@ -333,7 +333,10 @@ form.inq{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
 .hero .name,.hero .place,.hero-desc{text-shadow:0 1px 18px rgba(0,0,0,.6)}
 .hero-desc{margin-top:16px;max-width:36ch;font-size:clamp(17px,.8vw + 13px,20px);line-height:1.5;color:var(--siding)}
 .hero-link{margin-top:14px;font-family:var(--f-ui);font-size:14px;letter-spacing:.06em}
-.hero-link .textlink{text-shadow:none}
+.btn-outline{display:inline-flex;align-items:center;min-height:44px;padding:10px 20px;border:1px solid color-mix(in srgb,var(--tungsten) 80%,transparent);border-radius:2px;color:var(--siding);background:rgba(var(--night-rgb),.35);text-decoration:none;font-family:var(--f-ui);font-weight:500;font-size:13px;letter-spacing:.14em;text-transform:uppercase;transition:background .2s,color .2s,border-color .2s}
+.btn-outline:hover{background:color-mix(in srgb,var(--tungsten) 18%,rgba(var(--night-rgb),.4));border-color:var(--tungsten);color:#fff}
+.btn-outline:focus-visible{outline:2px solid var(--tungsten);outline-offset:3px;background:color-mix(in srgb,var(--tungsten) 18%,rgba(var(--night-rgb),.4))}
+.hero-link{margin-top:20px}
 .clip .th img{scale:1.12}
 .clip:hover .th img{transform:scale(1.04)}
 body[data-view="contact"] .foot-contact{display:none}
@@ -362,6 +365,13 @@ a[href^="tel:"]{white-space:nowrap}
 .pkg-list li::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--tungsten);margin:0 12px 2px 0;vertical-align:middle}
 .pkg-ask{margin-top:auto;padding-top:12px;font-size:16px}
 .pkg-phone{color:var(--dust)}
+.gal figure.cap figcaption{position:absolute;left:0;right:0;bottom:0;padding:24px 14px 10px;font-size:13.5px;color:#fff;background:linear-gradient(transparent,rgba(var(--night-rgb),.85))}
+.gal .w12{grid-column:span 12}.gal .wide-strip{aspect-ratio:21/9}
+@media (max-width:700px){.gal .wide-strip{aspect-ratio:16/9}}
+.pkg-ph figcaption{color:#fff;font-size:13.5px}
+.site-foot{color:color-mix(in srgb,var(--siding) 80%,var(--night))}
+.site-foot a{color:inherit}
+.caption,.room p,.aside{color:color-mix(in srgb,var(--siding) 80%,var(--night))}
 
 /* Preview bar + review notes (not part of the live site) */
 .pbar{position:fixed;left:0;right:0;bottom:0;z-index:60;background:var(--loft);border-top:1px solid color-mix(in srgb,var(--tungsten) 45%,transparent);color:var(--siding);padding:10px var(--gutter) calc(10px + env(safe-area-inset-bottom,0px));display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 16px;font-family:var(--f-ui);font-size:12.5px;letter-spacing:.04em}
@@ -402,14 +412,14 @@ body.notes .rn::before{content:"Review note · ";font-weight:500}
       <h1 class="name">Dharma Barn</h1>
       <p class="place">Hygiene, Colorado</p>
       <p class="hero-desc">Recording, live music films, and intimate events in a historic Colorado barn.</p>
-      <p class="hero-link"><a class="textlink" href="#contact" data-link>Plan a session</a></p>
+      <p class="hero-link"><a class="btn-outline" href="#contact" data-link>Plan a session</a></p>
     </div>
   </section>
 
   <section class="band">
     <div class="wrap">
       <div class="prose lead-prose">
-        <p>Dharma Barn is a 1918 barn on North 75th Street in Hygiene, between Longmont and Lyons. These days it holds a recording studio, a stage set up for filming, and room for a small show.</p>
+        <p>Dharma Barn is a 1918 barn on North 75th Street in Hygiene, between Longmont and Lyons. Today it holds a recording studio, a stage set up for filming, and room for concerts and dinners.</p>
         <p>Bands come out to make a record, to film a live session, or both at once.</p>
       </div>
     </div>
@@ -436,17 +446,17 @@ body.notes .rn::before{content:"Review note · ";font-weight:500}
         <a class="room" href="#recording" data-link>
           <figure class="ph"><img src="img/mics-stand.jpg" alt="Vintage microphones on stands in the studio" loading="lazy"><span class="missing">Photo unavailable</span></figure>
           <h2 class="room-name">Recording</h2>
-          <p>An API console and a cabinet of old Neumann, Telefunken and AKG microphones.</p>
+          <p>An API console and a collection of vintage Neumann, Telefunken, and AKG microphones.</p>
         </a>
         <a class="room" href="#video" data-link>
-          <figure class="ph"><img src="img/camera-op.jpg" alt="Camera operator on the stage" loading="lazy"><span class="missing">Photo unavailable</span></figure>
+          <figure class="ph"><img src="img/stage-drums.jpg" alt="The lit stage with a drum kit and amplifiers set up" loading="lazy"><span class="missing">Photo unavailable</span></figure>
           <h2 class="room-name">Video</h2>
           <p>The stage is lit and wired to film from several angles at once.</p>
         </a>
         <a class="room" href="#events" data-link>
-          <figure class="ph"><img src="img/fiddle-show.jpg" alt="Fiddle and guitar on the barn stage" loading="lazy"><span class="missing">Photo unavailable</span></figure>
+          <figure class="ph"><img src="img/wedding-dusk-yard.jpg" alt="Guests mingle and dance in a string-lit yard at dusk" loading="lazy" style="object-position:85% 60%"><span class="missing">Photo unavailable</span></figure>
           <h2 class="room-name">Events</h2>
-          <p>Small concerts, dinners and rehearsals in the barn.</p>
+          <p>Concerts, weddings, dinners and rehearsals at the barn.</p>
         </a>
       </div>
     </div>
@@ -470,11 +480,11 @@ body.notes .rn::before{content:"Review note · ";font-weight:500}
     <div class="wrap split">
       <div class="prose">
         <p>We track, mix and master at the barn. A band can set up on the stage and play together, or work through the parts one at a time.</p>
-        <p>Everything runs through an API 1608-II console. The microphones are mostly old ones: a Neumann U 47 with its VF14 tube, a U 67, an AKG C24, a Telefunken ELA M 251 E. Neve, API, Manley and Pultec hardware does most of the rest.</p>
+        <p>Everything runs through an API 1608-II console. The mics include a vintage Neumann U 47 with its VF14 tube, a vintage AKG C24, a U 67 and a Telefunken ELA M 251 E. Neve, API, Manley and Pultec hardware does most of the rest.</p>
         <p>Mastering has its own chain, with Pultec equalizers, a Requisite L2M limiter and Lynx and SPL converters.</p>
         <p>Chris Wright runs the studio and the video work.</p>
       </div>
-      <figure class="ph tall"><img src="img/mics-lineup.jpg" alt="Four vintage tube microphones laid side by side" loading="lazy"><span class="missing">Photo unavailable</span></figure>
+      <figure class="ph tall"><img src="img/mics-lineup.jpg" alt="Four tube microphones laid side by side" loading="lazy"><span class="missing">Photo unavailable</span></figure>
     </div>
   </section>
 
@@ -586,7 +596,7 @@ body.notes .rn::before{content:"Review note · ";font-weight:500}
   <section class="band">
     <div class="wrap split">
       <div class="prose">
-        <p>Every so often the barn opens for a small concert. It also hosts dinners, rehearsals and the odd livestream. The stage, lights and sound are already set up.</p>
+        <p>The barn hosts concerts, weddings, dinners, rehearsals and livestreams. The stage, lights and sound are already in place.</p>
         <p>News about shows goes out on Instagram, at <a class="textlink" href="https://www.instagram.com/dharma_farm_/" target="_blank" rel="noopener">@dharma_farm_</a>.</p>
       </div>
       <div>
@@ -603,14 +613,17 @@ body.notes .rn::before{content:"Review note · ";font-weight:500}
   <section class="band tight">
     <div class="wrap">
       <div class="gal">
-        <figure class="w8 h"><img src="img/stage-sparkle.jpg" alt="The stage under sparkling lights" loading="lazy"><span class="missing">Photo unavailable</span></figure>
+        <figure class="w8 h cap"><img src="img/wedding-toasts-yard.jpg" alt="Evening reception crowd gathered around a candlelit table and draped tent" loading="lazy" style="object-position:50% 40%"><span class="missing">Photo unavailable</span><figcaption>A wedding reception in the yard, September 2026</figcaption></figure>
         <figure class="w4 t"><img src="img/dinner-room.jpg" alt="Round dinner tables set under timber beams" loading="lazy"><span class="missing">Photo unavailable</span></figure>
+      </div>
+      <div class="gal" style="margin-top:clamp(8px,1.2vw,14px)">
+        <figure class="w12 wide-strip"><img src="img/stage-sparkle.jpg" alt="The stage under sparkling lights" loading="lazy"><span class="missing">Photo unavailable</span></figure>
       </div>
     </div>
   </section>
 
   <section class="band quiet">
-    <div class="wrap"><p class="aside">For a private event, write to Jeremy Ragland at <a class="textlink" href="mailto:dharmafarm@icloud.com">dharmafarm@icloud.com</a> or call <a class="textlink" href="tel:+13038081091">(303) 808-1091</a>.</p></div>
+    <div class="wrap"><p class="aside">For a private event, write to Jeramy Ragland at <a class="textlink" href="mailto:dharmafarm@icloud.com">dharmafarm@icloud.com</a> or call <a class="textlink" href="tel:+13038081091">(303) 808-1091</a>.</p></div>
   </section>
 </div>
 
@@ -628,12 +641,12 @@ body.notes .rn::before{content:"Review note · ";font-weight:500}
       </div>
       <div class="pkgs">
         <article class="pkg">
-          <figure class="pkg-ph ph"><img src="img/stage-wide.jpg" alt="The barn stage room with lounge seating" loading="lazy"><span class="missing">Photo unavailable</span><figcaption>The stage room, shown as set for a concert</figcaption></figure>
+          <figure class="pkg-ph ph"><img src="img/seating-stage.jpg" alt="Rows of wooden chairs facing the stage under teal light" loading="lazy" style="object-position:center 78%"><span class="missing">Photo unavailable</span><figcaption>Seating faces the stage in the barn</figcaption></figure>
           <div class="pkg-body">
             <h3>Private Screening</h3>
             <p class="pkg-who">For filmmakers and distributors who want a private room for their film.</p>
             <ul class="pkg-list"><li>Invite-only screenings</li><li>Filmmaker Q&amp;As</li><li>Distributor previews</li><li>Cast-and-crew gatherings</li></ul>
-            <p class="pkg-ask"><a class="textlink" href="mailto:dharmafarm@icloud.com?subject=Private%20Screening%2C%20Sundance%202027">Ask Jeremy about this</a> <span class="pkg-phone">or call <a class="textlink" href="tel:+13038081091">(303)&nbsp;808-1091</a></span></p>
+            <p class="pkg-ask"><a class="textlink" href="mailto:dharmafarm@icloud.com?subject=Private%20Screening%2C%20Sundance%202027">Ask Jeramy about this</a> <span class="pkg-phone">or call <a class="textlink" href="tel:+13038081091">(303)&nbsp;808-1091</a></span></p>
           </div>
         </article>
         <article class="pkg">
@@ -642,16 +655,16 @@ body.notes .rn::before{content:"Review note · ";font-weight:500}
             <h3>Brand &amp; Product Activation</h3>
             <p class="pkg-who">For brands and sponsors hosting guests during festival week.</p>
             <ul class="pkg-list"><li>Sponsor lounges</li><li>Product launches</li><li>VIP hospitality</li><li>Private receptions</li><li>Multi-day brand takeovers</li></ul>
-            <p class="pkg-ask"><a class="textlink" href="mailto:dharmafarm@icloud.com?subject=Brand%20%26%20Product%20Activation%2C%20Sundance%202027">Ask Jeremy about this</a> <span class="pkg-phone">or call <a class="textlink" href="tel:+13038081091">(303)&nbsp;808-1091</a></span></p>
+            <p class="pkg-ask"><a class="textlink" href="mailto:dharmafarm@icloud.com?subject=Brand%20%26%20Product%20Activation%2C%20Sundance%202027">Ask Jeramy about this</a> <span class="pkg-phone">or call <a class="textlink" href="tel:+13038081091">(303)&nbsp;808-1091</a></span></p>
           </div>
         </article>
         <article class="pkg">
-          <figure class="pkg-ph ph"><img src="img/stage-drums.jpg" alt="The barn stage with a band's gear set up under coloured light" loading="lazy"><span class="missing">Photo unavailable</span><figcaption>The barn stage, set up for a band</figcaption></figure>
+          <figure class="pkg-ph ph"><img src="img/camera-op.jpg" alt="A camera operator adjusting a camera on a tripod" loading="lazy" style="object-position:center 30%"><span class="missing">Photo unavailable</span><figcaption>A camera operator frames a shot in the barn</figcaption></figure>
           <div class="pkg-body">
             <h3>Audio/Visual Capture</h3>
             <p class="pkg-who">For anyone who wants their festival conversations and performances recorded.</p>
             <ul class="pkg-list"><li>Interviews</li><li>Podcasts</li><li>Livestreams</li><li>Live performances</li><li>Social content</li><li>Recap videos</li></ul>
-            <p class="pkg-ask"><a class="textlink" href="mailto:dharmafarm@icloud.com?subject=Audio%2FVisual%20Capture%2C%20Sundance%202027">Ask Jeremy about this</a> <span class="pkg-phone">or call <a class="textlink" href="tel:+13038081091">(303)&nbsp;808-1091</a></span></p>
+            <p class="pkg-ask"><a class="textlink" href="mailto:dharmafarm@icloud.com?subject=Audio%2FVisual%20Capture%2C%20Sundance%202027">Ask Jeramy about this</a> <span class="pkg-phone">or call <a class="textlink" href="tel:+13038081091">(303)&nbsp;808-1091</a></span></p>
           </div>
         </article>
       </div>
@@ -667,12 +680,12 @@ body.notes .rn::before{content:"Review note · ";font-weight:500}
       <div>
         <h1 class="page-title">Contact</h1>
         <div class="prose">
-          <p>Write or call and tell us a little about what you have in mind.</p>
+          <p>Write or call and tell us what you have in mind.</p>
         </div>
         <div class="people">
           <div class="person"><span class="name">Chris Wright</span><span class="role">Recording and video</span>
             <span class="copyable"><a href="tel:+17208785459">(720) 878-5459</a></span></div>
-          <div class="person"><span class="name">Jeremy Ragland</span><span class="role">The barn and events</span>
+          <div class="person"><span class="name">Jeramy Ragland</span><span class="role">The barn and events</span>
             <span class="copyable"><a href="tel:+13038081091">(303) 808-1091</a></span>
             <span class="copyable"><a href="mailto:dharmafarm@icloud.com">dharmafarm@icloud.com</a></span></div>
           <div class="person"><span class="name">12281 N 75th St</span><span class="role">Longmont, CO 80503 · in Hygiene, Boulder County</span>
