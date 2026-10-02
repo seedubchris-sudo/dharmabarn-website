@@ -344,6 +344,10 @@ body[data-view="contact"] .foot-contact{display:none}
 @media (min-width:1001px){.clips{grid-template-columns:repeat(3,minmax(0,1fr))}}
 a[href^="tel:"]{white-space:nowrap}
 .clip strong{text-wrap:balance}
+button.clip{background:none;border:0;padding:0;color:inherit;font:inherit;text-align:left;cursor:pointer}
+.clip-local.playing .th::after{display:none}
+.clip-err{position:absolute;inset:0;display:grid;place-items:center;padding:12px;text-align:center;font-size:14px;background:rgba(var(--night-rgb),.85);color:var(--siding)}
+.feature-name{font-weight:600;color:var(--siding)}
 .clip .th::after{opacity:0;transition:opacity .25s}
 .clip:hover .th::after,.clip:focus-visible .th::after{opacity:1}
 @media (hover:none){.clip .th::after{opacity:.85}}
@@ -454,7 +458,7 @@ body.notes .rn::before{content:"Review note · ";font-weight:500}
           <p>The stage is lit and wired to film from several angles at once.</p>
         </a>
         <a class="room" href="#events" data-link>
-          <figure class="ph"><img src="img/wedding-dusk-yard.jpg" alt="Guests mingle and dance in a string-lit yard at dusk" loading="lazy" style="object-position:85% 60%"><span class="missing">Photo unavailable</span></figure>
+          <figure class="ph"><img src="img/wedding-dusk-yard-v2.jpg" alt="Wedding guests dancing at dusk in the barn yard, lit by tube lights" loading="lazy"><span class="missing">Photo unavailable</span></figure>
           <h2 class="room-name">Events</h2>
           <p>Concerts, weddings, dinners and rehearsals at the barn.</p>
         </a>
@@ -567,15 +571,13 @@ body.notes .rn::before{content:"Review note · ";font-weight:500}
 
   <section class="band" id="video-reel">
     <div class="wrap">
-      <div class="player" id="cactus-player">
-        <video id="cactus-video" controls playsinline preload="metadata" poster="img/cactus-pals-poster.jpg">
-          <source src="media/cactus-pals-clip.mp4" type="video/mp4">
-        </video>
-        <div class="fallback" hidden style="background:linear-gradient(var(--scrim),var(--scrim)),url(img/cactus-pals-poster.jpg) center/cover">
-          <p>This video couldn't load. Try refreshing the page.</p>
-        </div>
+      <div class="player" id="feature-player">
+        <button class="yt-facade" id="feature-video" type="button" data-yt="mR_TFoWGO_8" data-title="Shook Twins at Dharma Barn" aria-label="Play Shook Twins, live at Dharma Barn">
+          <img src="img/shook-twins-poster.jpg" alt="Shook Twins performing on the Dharma Barn stage">
+          <span class="yt-play" aria-hidden="true">&#9654;</span>
+        </button>
       </div>
-      <p class="caption">Cactus Pals, filmed live at the barn.</p>
+      <p class="caption"><strong class="feature-name">Shook Twins</strong>, live at the barn.</p>
       <div class="clips" data-clips="all" style="margin-top:clamp(32px,4vw,56px)"></div>
     </div>
   </section>
@@ -650,7 +652,7 @@ body.notes .rn::before{content:"Review note · ";font-weight:500}
       </div>
       <div class="pkgs">
         <article class="pkg">
-          <figure class="pkg-ph ph"><img src="img/seating-stage.jpg" alt="Rows of wooden chairs facing the stage under teal light" loading="lazy" style="object-position:center 78%"><span class="missing">Photo unavailable</span><figcaption>Seating faces the stage in the barn</figcaption></figure>
+          <figure class="pkg-ph ph"><img src="img/seating-stage-v2.jpg" alt="Rows of wooden chairs facing a lit stage in the barn" loading="lazy"><span class="missing">Photo unavailable</span><figcaption>Seating faces the stage in the barn</figcaption></figure>
           <div class="pkg-body">
             <h3>Private Screening</h3>
             <p class="pkg-who">For filmmakers and distributors who want a private room for their film.</p>
@@ -720,14 +722,17 @@ body.notes .rn::before{content:"Review note · ";font-weight:500}
 (function(){
   var CLIPS=[
     {id:"ta1Johw1Sdk",t:"Reed Foehl",s:"September 2026"},
-    {id:"mR_TFoWGO_8",t:"Shook Twins",s:"At the barn"},
     {id:"Ho9cJo9Uzxo",t:"Desert Hollow",s:"At the barn"},
     {id:"Kzf7ts125BI",t:"Dan Rodriguez",s:"At the barn"},
     {id:"0YeE4sCtIh8",t:"Shook Twins · “Coffee”",s:"Sylvan Esso cover"},
     {id:"DSFyvuu2VrA",t:"Dan Rodriguez · “Wild Horse”",s:"At the barn"},
-    {id:"DnW5WuU5-Tc",t:"Neil Sullivan",s:"At the barn"}
+    {id:"DnW5WuU5-Tc",t:"Neil Sullivan",s:"At the barn"},
+    {local:"media/cactus-pals-clip.mp4",poster:"img/cactus-pals-poster.jpg",t:"Cactus Pals",s:"Plays here · 2:42"}
   ];
   function clipHTML(c){
+    if(c.local) return '<button class="clip clip-local" type="button" data-src="'+c.local+'" aria-label="Play '+c.t+' here">'+
+      '<div class="th"><img src="'+c.poster+'" alt="" loading="lazy"><span class="missing">Thumbnail unavailable</span></div>'+
+      '<strong>'+c.t+'</strong><small>'+c.s+'</small></button>';
     return '<a class="clip" href="https://www.youtube.com/watch?v='+c.id+'" target="_blank" rel="noopener" aria-label="Watch '+c.t.replace(/"/g,'')+' on YouTube">'+
       '<div class="th"><img src="img/yt-'+c.id+'.jpg" alt="" loading="lazy"><span class="missing">Thumbnail unavailable</span></div>'+
       '<strong>'+c.t+'</strong>'+(c.s&&c.s!=='At the barn'?'<small>'+c.s+'</small>':'')+'</a>';
@@ -761,10 +766,27 @@ body.notes .rn::before{content:"Review note · ";font-weight:500}
     reelFacade.hidden=true; reelBox.appendChild(f);
   });
 
-  /* Cactus Pals clip: fallback if the file can't play */
-  var cv=document.getElementById('cactus-video');
-  if(cv){ var cvFail=function(){ cv.hidden=true; cv.parentElement.querySelector('.fallback').hidden=false; };
-    cv.querySelector('source').addEventListener('error',cvFail); cv.addEventListener('error',cvFail); }
+  /* Featured YouTube session: click to load (youtube-nocookie) */
+  var fBox=document.getElementById('feature-player'), fBtn=document.getElementById('feature-video');
+  function stopFeature(){ var f=fBox&&fBox.querySelector('iframe'); if(f){ f.remove(); fBtn.hidden=false; } }
+  if(fBtn) fBtn.addEventListener('click',function(){
+    var f=document.createElement('iframe');
+    f.src='https://www.youtube-nocookie.com/embed/'+fBtn.dataset.yt+'?autoplay=1&rel=0&playsinline=1';
+    f.title=fBtn.dataset.title; f.allow='autoplay; encrypted-media; picture-in-picture; fullscreen';
+    f.setAttribute('referrerpolicy','strict-origin-when-cross-origin');
+    f.style.cssText='position:absolute;inset:0;width:100%;height:100%;border:0';
+    fBtn.hidden=true; fBox.appendChild(f);
+  });
+  /* Locally hosted gallery clip (Cactus Pals): plays in place */
+  function stopLocal(){ document.querySelectorAll('.clip-local video').forEach(function(v){ v.pause(); }); }
+  document.addEventListener('click',function(e){
+    var b=e.target.closest('.clip-local'); if(!b||b.querySelector('video')) return;
+    var th=b.querySelector('.th'), v=document.createElement('video');
+    v.src=b.dataset.src; v.controls=true; v.playsInline=true; v.setAttribute('playsinline',''); v.poster=th.querySelector('img').getAttribute('src');
+    v.style.cssText='position:absolute;inset:0;width:100%;height:100%;background:#000;object-fit:contain';
+    v.addEventListener('error',function(){ th.insertAdjacentHTML('beforeend','<span class="clip-err">This video couldn\'t load. Try refreshing.</span>'); v.remove(); });
+    th.appendChild(v); b.classList.add('playing'); var p=v.play(); if(p&&p.catch)p.catch(function(){});
+  });
 
   /* Router */
   var views=[].slice.call(document.querySelectorAll('[data-view]'));
@@ -781,7 +803,7 @@ body.notes .rn::before{content:"Review note · ";font-weight:500}
       if(a.getAttribute('href')==='#'+target) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current');
     });
     if(target!=='home') stopReel();
-    if(cv && target!=='video' && !cv.paused) cv.pause();
+    if(target!=='video'){ stopFeature(); stopLocal(); }
     if(hv && !reduce){ if(target==='home'){var p=hv.play(); if(p&&p.catch)p.catch(function(){});} else hv.pause(); }
     document.title=(target==='home'?'Dharma Barn':target.charAt(0).toUpperCase()+target.slice(1)+' · Dharma Barn');
     if(anchor) anchor.scrollIntoView(); else window.scrollTo({top:0,behavior:'instant'});
