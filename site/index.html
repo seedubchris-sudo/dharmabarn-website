@@ -325,8 +325,8 @@ form.inq{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
 @media (min-width:701px){.gal .t{aspect-ratio:auto}}
 .page-hero .wrap{padding-block:clamp(28px,4vw,56px)}
 .hero + .band{padding-top:clamp(40px,5vw,80px)}
-.hero-media video{object-position:50% 30%}
-@media (max-width:700px){.hero-media video{object-position:54% 50%}}
+.hero-media video{object-position:50% 12%}
+@media (max-width:700px){.hero-media video{object-position:60% 50%}}
 /* Home hero: lighter overlay so the performance shows; darkest only behind the text */
 .hero:not(.page-hero)::after{background:linear-gradient(90deg,rgba(var(--night-rgb),.5) 0%,rgba(var(--night-rgb),.18) 55%,rgba(var(--night-rgb),.08) 100%),linear-gradient(180deg,rgba(var(--night-rgb),0) 45%,rgba(var(--night-rgb),.7) 85%,var(--night) 100%)}
 @media (max-width:700px){.hero:not(.page-hero)::after{background:linear-gradient(180deg,rgba(var(--night-rgb),.12) 0%,rgba(var(--night-rgb),.1) 40%,rgba(var(--night-rgb),.78) 78%,var(--night) 100%)}}
@@ -403,8 +403,8 @@ body.notes .rn::before{content:"Review note · ";font-weight:500}
 <div data-view="home">
   <section class="hero">
     <div class="hero-media">
-      <video id="hero-video" muted loop playsinline preload="metadata" poster="img/hero-wildhorse.jpg" aria-hidden="true">
-        <source src="media/hero-wildhorse.mp4" type="video/mp4">
+      <video id="hero-video" muted loop playsinline preload="metadata" poster="img/hero-wildhorse-v2.jpg" aria-hidden="true">
+        <source src="media/hero-wildhorse-v2.mp4" type="video/mp4">
       </video>
       <span class="missing">Video unavailable</span>
     </div>
@@ -567,7 +567,16 @@ body.notes .rn::before{content:"Review note · ";font-weight:500}
 
   <section class="band" id="video-reel">
     <div class="wrap">
-      <div class="clips" data-clips="all"></div>
+      <div class="player" id="cactus-player">
+        <video id="cactus-video" controls playsinline preload="metadata" poster="img/cactus-pals-poster.jpg">
+          <source src="media/cactus-pals-clip.mp4" type="video/mp4">
+        </video>
+        <div class="fallback" hidden style="background:linear-gradient(var(--scrim),var(--scrim)),url(img/cactus-pals-poster.jpg) center/cover">
+          <p>This video couldn't load. Try refreshing the page.</p>
+        </div>
+      </div>
+      <p class="caption">Cactus Pals, filmed live at the barn.</p>
+      <div class="clips" data-clips="all" style="margin-top:clamp(32px,4vw,56px)"></div>
     </div>
   </section>
 
@@ -752,6 +761,11 @@ body.notes .rn::before{content:"Review note · ";font-weight:500}
     reelFacade.hidden=true; reelBox.appendChild(f);
   });
 
+  /* Cactus Pals clip: fallback if the file can't play */
+  var cv=document.getElementById('cactus-video');
+  if(cv){ var cvFail=function(){ cv.hidden=true; cv.parentElement.querySelector('.fallback').hidden=false; };
+    cv.querySelector('source').addEventListener('error',cvFail); cv.addEventListener('error',cvFail); }
+
   /* Router */
   var views=[].slice.call(document.querySelectorAll('[data-view]'));
   var names=views.map(function(v){return v.dataset.view});
@@ -767,6 +781,7 @@ body.notes .rn::before{content:"Review note · ";font-weight:500}
       if(a.getAttribute('href')==='#'+target) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current');
     });
     if(target!=='home') stopReel();
+    if(cv && target!=='video' && !cv.paused) cv.pause();
     if(hv && !reduce){ if(target==='home'){var p=hv.play(); if(p&&p.catch)p.catch(function(){});} else hv.pause(); }
     document.title=(target==='home'?'Dharma Barn':target.charAt(0).toUpperCase()+target.slice(1)+' · Dharma Barn');
     if(anchor) anchor.scrollIntoView(); else window.scrollTo({top:0,behavior:'instant'});
