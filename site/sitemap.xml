@@ -1,2 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>https://dharmabarn.com/</loc></url></urlset>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<url><loc>https://dharmabarn.com/</loc></url>
+<url><loc>https://dharmabarn.com/recording/</loc></url>
+<url><loc>https://dharmabarn.com/video/</loc></url>
+<url><loc>https://dharmabarn.com/events/</loc></url>
+<url><loc>https://dharmabarn.com/sundance/</loc></url>
+<url><loc>https://dharmabarn.com/contact/</loc></url>
+</urlset>

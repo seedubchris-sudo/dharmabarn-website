@@ -8,12 +8,37 @@ Edit the preview `index.html`, then rebuild into `site/` rather than editing `in
 
 DNS lives at GoDaddy. Only the website records point here. Email (MX/TXT for Microsoft 365) stays unchanged.
 
+## Separate pages (branch `up/2026-11-20-separate-pages`, not staged, not deployed)
+
+The site is six real pages: `/`, `/recording/`, `/video/`, `/events/`, `/sundance/` and `/contact/`. Each has its own
+title, description, canonical address and share image, the same header and footer, and a menu that marks the
+current page. Wording, photos and styles are unchanged from the one-file site.
+
+```bash
+python3 build_pages.py   # reads src/single-page.html, writes the six pages, redirects, 404 links and sitemap into ./site
+```
+
+- `src/single-page.html` is the `index.html` that `build_site.py` writes (every section in one file, switched by
+  `#hash`). To change wording or photos: edit the preview in the HQ project, run `build_site.py` into a scratch
+  folder, copy its `index.html` here as `src/single-page.html` (and any new photos into `site/img/`), then run
+  `build_pages.py`. It stops with a message if the source no longer has a piece it expects.
+- Page titles and descriptions are in the `PAGES` list at the top of `build_pages.py`. They reuse sentences already
+  on each page.
+- Old links keep working: `/#recording` and the like forward to the new page, and the old GoDaddy addresses
+  (`/dharma-barn-recording`, `/dharma-barn-video`, `/dharma-barn-events`, `/sundance-2027-packages`, `/lander`)
+  redirect to the new pages. `/contact` is now the Contact page itself.
+- The Video page's clip list is written into the HTML, so every page shows its full content with JavaScript off.
+- This branch includes commit `c903640` (site checks, skip link, 404 page, noindex for workers.dev).
+
 ## Checks before staging
 
 ```bash
 python3 checks/site_checks.py              # checks ./site; exit code 1 on any problem
-python3 checks/site_checks.py --self-test  # plants 8 faults on a temporary copy and confirms each is caught
+python3 checks/site_checks.py --self-test  # plants 11 faults on a temporary copy and confirms each is caught
 ```
+
+The "Separate pages" check confirms each page has its own title and description, the right canonical address, an
+existing share image, a menu of real page links with the current page marked, and a line in `sitemap.xml`.
 
 Runs offline with Python 3 and node only. It checks internal links and anchors, basic HTML validity, accessibility
 basics (skip link, one `h1` per page view, image alt text, names on links and buttons, field labels), the

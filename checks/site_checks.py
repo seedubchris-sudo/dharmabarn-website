@@ -26,6 +26,7 @@ VOID = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "met
 OPTIONAL_END = {"p", "li", "option", "tr", "td", "th", "dt", "dd"}
 URL_ATTRS = {"href", "src", "poster", "data-src"}
 REDIRECT_STUB = re.compile(r'http-equiv="refresh"', re.I)
+ORIGIN = "https://dharmabarn.com"
 NODE_DIRS = [Path.home() / "Library/Application Support/Indigo HQ/toolchain/node/bin", Path("/opt/homebrew/bin"), Path("/usr/local/bin")]
 
 
@@ -292,6 +293,55 @@ def check_headers_and_404(site, pages):
     return fails, "_headers noindex rule limited to workers.dev; 404 page says so and links home"
 
 
+def check_pages(site, pages):
+    """Separate pages: each has its own title, description and canonical address, a menu of real links that marks
+    the current page, a share image that exists, and a line in sitemap.xml."""
+    fails, titles, descs, canon = [], {}, {}, set()
+    for path, pg in pages.items():
+        rel = path.relative_to(site).as_posix()
+        if REDIRECT_STUB.search(pg.text) or rel == "404.html":
+            continue
+        own = "/" if rel == "index.html" else "/" + rel[:-len("index.html")]
+        metas = {m["attrs"].get("name") or m["attrs"].get("property"): m["attrs"].get("content", "") for m in pg.find("meta")}
+        title = " ".join((pg.find("title") or [{"text": ""}])[0]["text"].split())
+        desc = metas.get("description", "").strip()
+        if not desc:
+            fails.append(f"{rel}: no meta description")
+        for kind, seen, val in (("title", titles, title), ("description", descs, desc)):
+            if val and val in seen:
+                fails.append(f"{rel}: has the same {kind} as {seen[val]}")
+            seen.setdefault(val, rel)
+        links = [l["attrs"].get("href") for l in pg.find("link") if l["attrs"].get("rel") == "canonical"]
+        if links != [ORIGIN + own]:
+            fails.append(f"{rel}: canonical address should be {ORIGIN + own}, found {links}")
+        canon.add(ORIGIN + own)
+        if metas.get("og:url") != ORIGIN + own:
+            fails.append(f"{rel}: og:url should be {ORIGIN + own}")
+        img = metas.get("og:image", "")
+        if not img.startswith(ORIGIN + "/") or not (site / img[len(ORIGIN) + 1:]).exists():
+            fails.append(f"{rel}: share image is missing from the site: {img}")
+        menu = [a for a in pg.find("a") if any(p["tag"] == "nav" for p in a["parents"])]
+        if len(menu) < 5:
+            fails.append(f"{rel}: the menu has {len(menu)} links (needs Recording, Video, Events, Sundance and Contact)")
+        for a in menu:
+            if not a["attrs"].get("href", "").startswith("/"):
+                fails.append(f"{rel}:{a['line']} menu link is not a page address: {a['attrs'].get('href')}")
+        current = [a["attrs"].get("href") for a in menu if a["attrs"].get("aria-current") == "page"]
+        if current != ([] if own == "/" else [own]):
+            fails.append(f"{rel}: the menu should mark {own if own != '/' else 'no page'} as the current page, found {current}")
+        if 'data-view="' + rel.split("/")[0] + '"' not in pg.text and own != "/":
+            fails.append(f"{rel}: does not hold the \"{rel.split('/')[0]}\" section")
+        if len([e for e in pg.els if "data-view" in e["attrs"] and e["tag"] != "body"]) != 1:
+            fails.append(f"{rel}: should hold exactly one section of the site")
+    sm = site / "sitemap.xml"
+    listed = set(re.findall(r"<loc>([^<]+)</loc>", sm.read_text())) if sm.exists() else set()
+    for u in sorted(canon - listed):
+        fails.append(f"sitemap.xml does not list {u}")
+    for u in sorted(listed - canon):
+        fails.append(f"sitemap.xml lists {u}, which is not a page of the site")
+    return fails, f"{len(canon)} pages, each with its own title, description, canonical address and sitemap line"
+
+
 def find_tool(name):
     hit = shutil.which(name)
     if hit:
@@ -339,7 +389,7 @@ def run(site, quiet=False):
     pages = load(site)
     total = []
     for title, fn in (("Links", check_links), ("HTML validity (basic)", check_html), ("Accessibility (basic)", check_a11y),
-                      ("Search-engine headers and 404 page", check_headers_and_404)):
+                      ("Separate pages", check_pages), ("Search-engine headers and 404 page", check_headers_and_404)):
         fails, note = fn(site, pages)
         say(f"{'FAIL' if fails else 'ok  '}  {title}: {note}")
         for f in fails:
@@ -367,6 +417,11 @@ PLANTS = [
     ("an unclosed tag", "404.html", "</main>", "<div></main>", "not closed"),
     ("noindex on every host", "_headers", "https://:version.:subdomain.workers.dev/*", "/*", "workers.dev"),
     ("a 404 page that redirects", "404.html", "<title>", '<meta http-equiv="refresh" content="0; url=/"><title>', "redirects"),
+    ("a page with another page's title", "recording/index.html", "<title>Recording · Dharma Barn</title>",
+     "<title>Video · Dharma Barn</title>", "same title"),
+    ("a page left out of the sitemap", "sitemap.xml", "<url><loc>https://dharmabarn.com/events/</loc></url>\n", "", "sitemap.xml does not list"),
+    ("a menu link back to a #hash view", "video/index.html", '<a href="/contact/">Contact</a>', '<a href="#contact">Contact</a>',
+     "not a page address"),
 ]
 
 
