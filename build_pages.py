@@ -7,18 +7,23 @@
 Input: src/single-page.html, which is the index.html that build_site.py (in the Dharma Barn HQ project) writes.
 That file holds every section as a "view" switched by the #hash. This script writes one real page per view,
 each with its own title, description, canonical address and share image, and the same header, footer, styles
-and script. It changes no wording, photo or style. It also:
+and script. It changes no photo or style. It also:
 
 - turns the #hash navigation into real links and marks the current page in the menu
 - writes the Video page's clip list into the HTML, so the page is complete with JavaScript off
-- keeps old links working: /#recording and the like forward to the new page, and the old GoDaddy
-  addresses (/dharma-barn-recording ...) redirect to the new pages
+- keeps old links working: /#recording and the like forward to the new page (in the browser, because the part
+  after # is never sent to the server), and the old GoDaddy addresses (/dharma-barn-recording ...) get a
+  permanent redirect (301) in site/_redirects, the file Cloudflare reads for static assets
 - lists all six pages in sitemap.xml and points the 404 page's links at them
+- sets the search wording (title, description, main heading) for Home, Recording, Video and Contact, and writes
+  the business facts for search engines (schema.org JSON-LD) from the FACTS table below. Events and Sundance
+  keep their wording exactly.
 
 It stops with a message if a piece of text it expects is missing, so a change in the source cannot pass silently.
 Images, media, robots.txt and _headers in the output folder are left as they are.
 """
 import html
+import json
 import os
 import re
 import sys
@@ -26,32 +31,138 @@ import sys
 ROOT = os.path.dirname(os.path.abspath(__file__))
 ORIGIN = "https://dharmabarn.com"
 
-# Titles follow the pattern the one-file site already set in the browser tab ("Recording · Dharma Barn").
-# Descriptions reuse sentences already on each page; no new facts.
+# Search wording, 2026-11-22. Home, Recording, Video and Contact use the words people type for recording and
+# filmed live sessions near Longmont. Every statement is already on the site; no new facts. Events and Sundance
+# are unchanged on purpose (their wording waits on Chris). "h1" is (heading in the source, heading to publish).
 PAGES = [
-    {"view": "home", "path": "/", "title": None, "og_title": None, "desc": None, "image": None},
-    {"view": "recording", "path": "/recording/", "title": "Recording · Dharma Barn", "image": "console.jpg",
-     "desc": "We track, mix and master at Dharma Barn in Hygiene, Colorado. Everything runs through an API 1608-II "
-             "console, with a collection of vintage Neumann, Telefunken, and AKG microphones."},
-    {"view": "video", "path": "/video/", "title": "Video · Dharma Barn", "image": "stage-teal.jpg",
-     "desc": "Shows on the Dharma Barn stage in Hygiene, Colorado are filmed on Sony cameras from several angles "
-             "under stage lights, and each performance is recorded to multitrack at the same time."},
+    {"view": "home", "path": "/", "image": "barn-dusk.jpg",
+     "title": "Dharma Barn · Recording Studio & Live Sessions near Longmont, CO",
+     "desc": "Recording studio, filmed live sessions and concert video, and a private venue, in a 1918 barn in "
+             "Hygiene, between Longmont and Lyons in Boulder County, Colorado."},
+    {"view": "recording", "path": "/recording/", "image": "console.jpg",
+     "title": "Recording Studio near Longmont, CO · Dharma Barn",
+     "h1": ("<h1>Recording</h1>", "<h1>Recording studio near Longmont</h1>"),
+     "desc": "Recording studio in a 1918 barn in Hygiene, near Longmont, Colorado. Tracking, mixing and mastering "
+             "on an API 1608-II console with vintage Neumann and AKG microphones."},
+    {"view": "video", "path": "/video/", "image": "stage-teal.jpg",
+     "title": "Live Session Video & Concert Filming, Colorado · Dharma Barn",
+     "h1": ("<h1>Video</h1>", "<h1>Live session and concert video</h1>"),
+     "desc": "Live session and concert video for bands, filmed from several camera angles on the barn stage near "
+             "Longmont, Colorado, with multitrack audio mixed in our studio."},
     {"view": "events", "path": "/events/", "title": "Events · Dharma Barn", "image": "crowd.jpg",
      "desc": "Dharma Barn in Hygiene, Colorado hosts concerts, weddings, dinners, rehearsals and livestreams. "
              "The stage, lights and sound are already in place."},
     {"view": "sundance", "path": "/sundance/", "title": "Sundance 2027 · Dharma Barn", "image": "barn-dusk.jpg",
      "desc": "The Sundance Film Festival moves to Boulder for 2027, from January 21 to 31. Dharma Barn in Hygiene "
              "is offering the barn for private screenings, brand events and recorded sessions that week."},
-    {"view": "contact", "path": "/contact/", "title": "Contact · Dharma Barn", "image": "barn-moon.jpg",
-     "desc": "Write or call Dharma Barn. Chris Wright for recording and video, Jeremy Ragland for the barn and "
-             "events. 12281 N 75th St, Longmont, CO 80503, in Hygiene, Boulder County."},
+    {"view": "contact", "path": "/contact/", "image": "barn-moon.jpg",
+     "title": "Contact · Dharma Barn, Hygiene, near Longmont, Colorado",
+     "desc": "Call or write to plan a recording or a filmed live session: Chris Wright. For the barn and events: "
+             "Jeremy Ragland. 12281 N 75th St, Longmont, CO 80503, in Hygiene."},
 ]
 PATH_OF = {p["view"]: p["path"] for p in PAGES}
 # Anchors that used to live in the one file and now sit on another page.
 MOVED_ANCHORS = {"inventory": "/recording/#inventory", "video-reel": "/video/#video-reel"}
-# Old GoDaddy addresses still in search results. (/contact is now the real Contact page.)
+# Old GoDaddy addresses still in search results. (/contact is now the real Contact page.) Written to
+# site/_redirects as permanent redirects, with and without the closing slash.
 OLD_ADDRESSES = {"dharma-barn-recording": "/recording/", "dharma-barn-video": "/video/", "dharma-barn-events": "/events/",
-                 "sundance-2027-packages": "/sundance/", "lander": "/"}
+                 "sundance-2027-packages": "/sundance/", "lander": "/",
+                 # the old GoDaddy booking pages (in the old site's own sitemap; Bing still lists the first)
+                 "ola/services/mixing-and-mastering": "/recording/",
+                 "ola/services/audio-visual-capture-of-live-event": "/video/",
+                 "ola/services/video-product-screening-events": "/sundance/"}
+
+# Business facts for search engines. Every value is already public on the site (footer, Contact page).
+# One place only: the JSON-LD is written from this table, and checks/site_checks.py compares it with the visible
+# page. Left out on purpose, because the site does not state them or the decision is not made: opening hours,
+# map coordinates, prices, reviews, "Dharma Farm" as a second name, and the events phone number.
+FACTS = {
+    "name": "Dharma Barn",
+    "phone": "+1-720-878-5459",  # Chris Wright, recording and video; shown on the pages as (720) 878-5459
+    "email": "dharmafarm@icloud.com",
+    "street": "12281 N 75th St", "city": "Longmont", "region": "CO", "postcode": "80503", "country": "US",
+    "profiles": ["https://www.youtube.com/@dharma_barn", "https://www.instagram.com/dharma_farm_/",
+                 "https://www.facebook.com/p/Dharma-Farm-100095685273767/"],
+    "about": "Recording studio and filmed live sessions in a 1918 barn in Hygiene, Colorado, between Longmont and Lyons.",
+}
+BUSINESS_ID = ORIGIN + "/#business"
+
+# In-text links between the pages (same words, now links), so each service page points at the other.
+TEXT_LINKS = [
+    ("recording", "Chris Wright runs the studio and the video work.",
+     'Chris Wright runs the studio and the <a class="textlink" href="/video/">video work</a>.'),
+    ("video", "We mix the audio in the studio first, then cut the picture to it.",
+     'We mix the audio in <a class="textlink" href="/recording/">the studio</a> first, then cut the picture to it.'),
+]
+# Heading order: no level is skipped under the page's one main heading. Only the tag changes; the style rule
+# added beside each keeps the look as it was. (view, old tag, new tag, how many are expected)
+HEADING_FIXES = [
+    ("recording", "<h4", "<h3", 5), ("recording", "</h4>", "</h3>", 5),
+    ("sundance", "<h3>", "<h2>", 3), ("sundance", "</h3>", "</h2>", 3),
+]
+HEADING_CSS = [
+    (".inv-grid h4{font-family:var(--f-ui);font-weight:500;font-size:12px;letter-spacing:var(--label-track);"
+     "text-transform:uppercase;color:var(--tungsten);margin:0 0 10px}",
+     ".inv-grid h3{font-family:var(--f-ui);font-weight:500;font-size:12px;letter-spacing:var(--label-track);"
+     "text-transform:uppercase;color:var(--tungsten);margin:0 0 10px;font-variation-settings:normal;"
+     "line-height:inherit;text-wrap:wrap}"),
+    (".pkg h3{font-size:clamp(22px,1.8vw,26px);font-weight:400;color:var(--siding)}",
+     ".pkg h2{font-size:clamp(22px,1.8vw,26px);line-height:1.18;font-weight:400;color:var(--siding)}"),
+]
+
+
+def business():
+    f = FACTS
+    return {
+        "@type": "LocalBusiness", "@id": BUSINESS_ID, "name": f["name"],
+        "additionalType": "https://www.wikidata.org/wiki/Q746369",  # "recording studio"; schema.org has no such type
+        "description": f["about"], "url": ORIGIN + "/", "image": ORIGIN + "/img/barn-dusk.jpg",
+        "telephone": f["phone"], "email": f["email"],
+        "address": {"@type": "PostalAddress", "streetAddress": f["street"], "addressLocality": f["city"],
+                    "addressRegion": f["region"], "postalCode": f["postcode"], "addressCountry": f["country"]},
+        "contactPoint": [{"@type": "ContactPoint", "contactType": "Recording and video",
+                          "telephone": f["phone"], "email": f["email"]}],
+        "sameAs": f["profiles"],
+    }
+
+
+def crumbs(name):
+    return {"@type": "BreadcrumbList", "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": FACTS["name"], "item": ORIGIN + "/"},
+        {"@type": "ListItem", "position": 2, "name": name}]}
+
+
+def structured_data(view):
+    """schema.org facts for one page, or None. Events and Sundance get none (their promotion waits on Chris)."""
+    provider = {"@type": "LocalBusiness", "@id": BUSINESS_ID, "name": FACTS["name"], "url": ORIGIN + "/"}
+    if view == "home":
+        graph = [business(), {"@type": "WebSite", "@id": ORIGIN + "/#website", "name": FACTS["name"],
+                              "url": ORIGIN + "/", "publisher": {"@id": BUSINESS_ID}}]
+    elif view == "recording":
+        graph = [{"@type": "Service", "@id": ORIGIN + "/recording/#service", "name": "Recording at Dharma Barn",
+                  "serviceType": "Recording studio services", "url": ORIGIN + "/recording/",
+                  "image": ORIGIN + "/img/console.jpg", "provider": provider,
+                  "description": "Tracking, mixing and mastering at Dharma Barn in Hygiene, Colorado, through an "
+                                 "API 1608-II console.",
+                  "hasOfferCatalog": {"@type": "OfferCatalog", "name": "Recording services", "itemListElement": [
+                      {"@type": "Offer", "itemOffered": {"@type": "Service", "name": n}}
+                      for n in ("Tracking", "Mixing", "Mastering")]}},
+                 crumbs("Recording")]
+    elif view == "video":
+        graph = [{"@type": "Service", "@id": ORIGIN + "/video/#service", "name": "Filmed live sessions at Dharma Barn",
+                  "serviceType": "Live session and concert video production", "url": ORIGIN + "/video/",
+                  "image": ORIGIN + "/img/stage-teal.jpg", "provider": provider,
+                  "description": "Performances on the Dharma Barn stage are filmed from several camera angles under "
+                                 "stage lights and recorded to multitrack at the same time."},
+                 crumbs("Video")]
+    elif view == "contact":
+        graph = [{"@type": "ContactPage", "@id": ORIGIN + "/contact/#page", "name": "Contact Dharma Barn",
+                  "url": ORIGIN + "/contact/", "mainEntity": {"@id": BUSINESS_ID}},
+                 business(), crumbs("Contact")]
+    else:
+        return None
+    text = json.dumps({"@context": "https://schema.org", "@graph": graph}, ensure_ascii=False, indent=1)
+    return '<script type="application/ld+json">\n' + text.replace("</", "<\\/") + "\n</script>\n"
 
 
 def stop(msg):
@@ -139,28 +250,46 @@ def build(src, out):
     if sorted(views) != sorted(PATH_OF):
         stop(f"views found {sorted(views)}; expected {sorted(PATH_OF)}")
 
+    for old, new in HEADING_CSS:  # the style follows the tag, so the page looks the same
+        before = swap(before, old, old + "\n" + new, "heading style")
+    for view, old, new, want in HEADING_FIXES:
+        if views[view].count(old) != want:
+            stop(f"heading order: expected {want} x {old!r} on the {view} page, found {views[view].count(old)}")
+        views[view] = views[view].replace(old, new)
+    for view, old, new in TEXT_LINKS:
+        views[view] = swap(views[view], old, new, f"in-text link on the {view} page")
+    for p in PAGES:
+        if "h1" in p:
+            views[p["view"]] = swap(views[p["view"]], p["h1"][0], p["h1"][1], f"main heading on {p['path']}")
+        if views[p["view"]].count("<h1") != 1:
+            stop(f"{p['path']} should have exactly one main heading (h1)")
+
     home_title = re.search(r"<title>(.*?)</title>", before).group(1)
     seen_titles, seen_descs = set(), set()
     for p in PAGES:
         head = before
+        url = ORIGIN + p["path"]
+        desc = html.escape(p["desc"], quote=True)
+        head = swap(head, f"<title>{home_title}</title>", f"<title>{html.escape(p['title'], quote=False)}</title>", "title")
+        head, n1 = re.subn(r'<meta property="og:description" content="[^"]*">', f'<meta property="og:description" content="{desc}">', head)
+        head, n2 = re.subn(r'<meta name="description" content="[^"]*">', f'<meta name="description" content="{desc}">', head)
+        if (n1, n2) != (1, 1):
+            stop("description tags not found exactly once")
+        if not os.path.exists(os.path.join(out, "img", p["image"])):
+            stop(f"share image missing from {out}/img: {p['image']}")
         if p["view"] != "home":
-            url = ORIGIN + p["path"]
-            desc = html.escape(p["desc"], quote=True)
-            head = swap(head, f"<title>{home_title}</title>", f"<title>{p['title']}</title>", "title")
+            og_title = html.escape(p["title"], quote=True)
             head = swap(head, f'<link rel="canonical" href="{ORIGIN}/">', f'<link rel="canonical" href="{url}">', "canonical")
-            head = swap(head, '<meta property="og:title" content="Dharma Barn">', f'<meta property="og:title" content="{p["title"]}">', "og:title")
+            head = swap(head, '<meta property="og:title" content="Dharma Barn">', f'<meta property="og:title" content="{og_title}">', "og:title")
             head = swap(head, f'<meta property="og:url" content="{ORIGIN}/">', f'<meta property="og:url" content="{url}">', "og:url")
             head = swap(head, f'<meta property="og:image" content="{ORIGIN}/img/barn-dusk.jpg">',
                         f'<meta property="og:image" content="{ORIGIN}/img/{p["image"]}">', "og:image")
-            if not os.path.exists(os.path.join(out, "img", p["image"])):
-                stop(f"share image missing from {out}/img: {p['image']}")
-            head, n1 = re.subn(r'<meta property="og:description" content="[^"]*">', f'<meta property="og:description" content="{desc}">', head)
-            head, n2 = re.subn(r'<meta name="description" content="[^"]*">', f'<meta name="description" content="{desc}">', head)
-            if (n1, n2) != (1, 1):
-                stop("description tags not found exactly once")
             head, n3 = re.subn(rf'(<nav class="nav".*?<a href="{re.escape(p["path"])}")', r'\1 aria-current="page"', head, count=1, flags=re.S)
             if n3 != 1:
                 stop(f"menu link for {p['path']} not found")
+        ld = structured_data(p["view"])
+        if ld:
+            head = swap(head, "</head>", ld + "</head>", "end of head")
         head = swap(head, "<body>", f'<body data-view="{p["view"]}">', "body tag")
         title = re.search(r"<title>(.*?)</title>", head).group(1)
         d = re.search(r'<meta name="description" content="([^"]*)">', head).group(1)
@@ -175,13 +304,16 @@ def build(src, out):
         with open(os.path.join(folder, "index.html"), "w", encoding="utf-8") as fh:
             fh.write(page)
 
+    # Permanent redirects for the old GoDaddy addresses, in the form Cloudflare reads for static assets: one rule
+    # per line, "from to code". Both the bare and the closing-slash form are listed, so neither passes through a
+    # temporary redirect first. They replace the small forwarding pages the earlier branch wrote.
+    lines = []
     for slug, target in OLD_ADDRESSES.items():
-        d = os.path.join(out, slug)
-        os.makedirs(d, exist_ok=True)
-        with open(os.path.join(d, "index.html"), "w", encoding="utf-8") as fh:
-            fh.write(f'<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Dharma Barn</title>'
-                     f'<link rel="canonical" href="{ORIGIN}{target}"><meta http-equiv="refresh" content="0; url={target}">'
-                     f'<script>location.replace("{target}")</script></head><body><p><a href="{target}">Continue to Dharma Barn</a></p></body></html>\n')
+        if os.path.exists(os.path.join(out, slug, "index.html")):
+            stop(f"{out}/{slug}/ still holds an old forwarding page; remove that folder (the redirect rule replaces it)")
+        lines += [f"/{slug} {target} 301", f"/{slug}/ {target} 301"]
+    with open(os.path.join(out, "_redirects"), "w", encoding="utf-8") as fh:
+        fh.write("\n".join(lines) + "\n")
 
     nf_path = os.path.join(out, "404.html")
     nf = open(nf_path, encoding="utf-8").read()
