@@ -30,11 +30,27 @@ python3 build_pages.py   # reads src/single-page.html, writes the six pages, red
 - The Video page's clip list is written into the HTML, so every page shows its full content with JavaScript off.
 - This branch includes commit `c903640` (site checks, skip link, 404 page, noindex for workers.dev).
 
+## Listing details for search engines (branch `up/2026-11-22-listing-details`, not staged, not deployed)
+
+`build_pages.py` adds one block of schema.org listing details (JSON-LD) to the head of each of the six pages. The
+facts are in `listing_details.py`.
+
+- Business entry on every page: name, address, both phone numbers with the roles the Contact page gives them,
+  the email address and the three footer links. No opening hours, map coordinates, prices or ratings, because the
+  site states none. The type is plain `LocalBusiness`.
+- Video entries only where the video plays on the page: the reel on Home; the Shook Twins show and the Cactus Pals
+  clip on Video. Clips that open on YouTube are left out (Google lists a video only on a page that plays it).
+- Video dates are not printed on the pages. The two YouTube dates are the upload dates YouTube shows (read
+  2026-11-22). The Cactus Pals date is the day the file was added to this site (commit `fce6a99`).
+- The build stops if a business fact in `listing_details.py` is no longer in the page source. The "Listing details"
+  check in `checks/site_checks.py` confirms each built page says the same thing as its listing details.
+- Not done here: Google's Rich Results Test needs a public address, so it waits for the staging copy.
+
 ## Checks before staging
 
 ```bash
 python3 checks/site_checks.py              # checks ./site; exit code 1 on any problem
-python3 checks/site_checks.py --self-test  # plants 11 faults on a temporary copy and confirms each is caught
+python3 checks/site_checks.py --self-test  # plants 18 faults on a temporary copy and confirms each is caught
 ```
 
 The "Separate pages" check confirms each page has its own title and description, the right canonical address, an

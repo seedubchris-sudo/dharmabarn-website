@@ -14,6 +14,7 @@ and script. It changes no wording, photo or style. It also:
 - keeps old links working: /#recording and the like forward to the new page, and the old GoDaddy
   addresses (/dharma-barn-recording ...) redirect to the new pages
 - lists all six pages in sitemap.xml and points the 404 page's links at them
+- adds the business and video listing details for search engines to each page (see listing_details.py)
 
 It stops with a message if a piece of text it expects is missing, so a change in the source cannot pass silently.
 Images, media, robots.txt and _headers in the output folder are left as they are.
@@ -22,6 +23,8 @@ import html
 import os
 import re
 import sys
+
+import listing_details
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 ORIGIN = "https://dharmabarn.com"
@@ -140,6 +143,7 @@ def build(src, out):
         stop(f"views found {sorted(views)}; expected {sorted(PATH_OF)}")
 
     home_title = re.search(r"<title>(.*?)</title>", before).group(1)
+    home_desc = html.unescape(re.search(r'<meta name="description" content="([^"]*)">', before).group(1))
     seen_titles, seen_descs = set(), set()
     for p in PAGES:
         head = before
@@ -162,6 +166,8 @@ def build(src, out):
             if n3 != 1:
                 stop(f"menu link for {p['path']} not found")
         head = swap(head, "<body>", f'<body data-view="{p["view"]}">', "body tag")
+        # Listing details for search engines; every fact in them is checked against the page source `s`.
+        head = swap(head, "</head>", listing_details.block(p["view"], s, home_desc, stop) + "</head>", "end of head")
         title = re.search(r"<title>(.*?)</title>", head).group(1)
         d = re.search(r'<meta name="description" content="([^"]*)">', head).group(1)
         if title in seen_titles or d in seen_descs:
