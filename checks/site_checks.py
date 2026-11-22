@@ -342,6 +342,168 @@ def check_pages(site, pages):
     return fails, f"{len(canon)} pages, each with its own title, description, canonical address and sitemap line"
 
 
+# schema.org terms the site may use: each type with the properties allowed on it here. Checked against
+# schema.org's published vocabulary on 2026-11-22. A type or property that is not listed fails the check, so a
+# new one has to be looked up and added on purpose.
+VOCAB = {
+    "LocalBusiness": {"name", "additionalType", "description", "url", "image", "telephone", "email", "address",
+                      "contactPoint", "sameAs"},
+    "PostalAddress": {"streetAddress", "addressLocality", "addressRegion", "postalCode", "addressCountry"},
+    "ContactPoint": {"contactType", "telephone", "email"},
+    "WebSite": {"name", "url", "publisher"},
+    "Service": {"name", "serviceType", "url", "image", "provider", "description", "hasOfferCatalog"},
+    "OfferCatalog": {"name", "itemListElement"},
+    "Offer": {"itemOffered"},
+    "BreadcrumbList": {"itemListElement"},
+    "ListItem": {"position", "name", "item"},
+    "ContactPage": {"name", "url", "mainEntity"},
+}
+LD_BLOCK = re.compile(r'<script type="application/ld\+json">(.*?)</script>', re.S)
+# Events and Sundance keep their wording until Chris decides: no facts block, and a short title is reported, not failed.
+FROZEN_PAGES = {"events/index.html", "sundance/index.html"}
+TITLE_LEN, DESC_LEN = (25, 70), (70, 200)
+
+
+def ld_nodes(obj):
+    """Every {...} inside a JSON-LD block, outermost first."""
+    if isinstance(obj, dict):
+        yield obj
+        for v in obj.values():
+            yield from ld_nodes(v)
+    elif isinstance(obj, list):
+        for v in obj:
+            yield from ld_nodes(v)
+
+
+def check_search(site, pages):
+    """Search wording and data: title and description length, heading order, no noindex, business facts (JSON-LD)
+    that parse, use known schema.org terms and match the visible page, favicon, robots.txt, sitemap and redirects."""
+    import json
+    fails, blocks, defined, referenced, kept = [], 0, set(), set(), []
+    for path, pg in pages.items():
+        rel = path.relative_to(site).as_posix()
+        if REDIRECT_STUB.search(pg.text):
+            fails.append(f"{rel}: forwards with a meta refresh; old addresses belong in _redirects as 301 lines")
+            continue
+        if rel == "404.html":
+            continue
+        metas = {m["attrs"].get("name") or m["attrs"].get("property"): m["attrs"].get("content", "") for m in pg.find("meta")}
+        title = " ".join((pg.find("title") or [{"text": ""}])[0]["text"].split())
+        desc = metas.get("description", "").strip()
+        if rel in FROZEN_PAGES and len(title) < TITLE_LEN[0]:
+            kept.append(f"{rel.split('/')[0]} title is short ({len(title)} characters) and is left as it is")
+        elif not TITLE_LEN[0] <= len(title) <= TITLE_LEN[1]:
+            fails.append(f"{rel}: title is {len(title)} characters (aim for {TITLE_LEN[0]} to {TITLE_LEN[1]})")
+        if not DESC_LEN[0] <= len(desc) <= DESC_LEN[1]:
+            fails.append(f"{rel}: description is {len(desc)} characters (aim for {DESC_LEN[0]} to {DESC_LEN[1]})")
+        if "noindex" in metas.get("robots", ""):
+            fails.append(f"{rel}: carries a robots noindex tag, which would hide the page from search engines")
+        last = 0
+        for e in pg.els:
+            if re.fullmatch(r"h[1-6]", e["tag"]):
+                level = int(e["tag"][1])
+                if level > last + 1:
+                    fails.append(f"{rel}:{e['line']} heading order: <{e['tag']}> follows "
+                                 + (f"<h{last}>" if last else "no heading") + " (a level is skipped)")
+                last = level
+        body_text = " ".join(((pg.find("body") or [{"text": ""}])[0]["text"]).split())
+        tel_digits = {re.sub(r"\D", "", u) for u, *_ in pg.urls if u.startswith("tel:")}
+        found = LD_BLOCK.findall(pg.text)
+        if rel in FROZEN_PAGES and found:
+            fails.append(f"{rel}: has a search-engine facts block; this page is to stay as it is until Chris decides")
+        if rel == "index.html" and not found:
+            fails.append("index.html: the business facts block (JSON-LD) is missing")
+        for raw in found:
+            blocks += 1
+            try:
+                data = json.loads(raw)
+            except ValueError as exc:
+                fails.append(f"{rel}: a JSON-LD block is not valid JSON: {exc}")
+                continue
+            if data.get("@context") != "https://schema.org":
+                fails.append(f"{rel}: JSON-LD @context should be https://schema.org")
+            if re.search(r"TODO|PHONE_|EMAIL\b|example\.com", raw):
+                fails.append(f"{rel}: a JSON-LD block still holds a placeholder")
+            for node in ld_nodes(data):
+                kind = node.get("@type")
+                keys = {k for k in node if not k.startswith("@")}
+                if kind is None:
+                    if keys:
+                        fails.append(f"{rel}: JSON-LD item without @type: {sorted(keys)}")
+                    elif "@id" in node:
+                        referenced.add(node["@id"])
+                    continue
+                if kind not in VOCAB:
+                    fails.append(f"{rel}: JSON-LD type \"{kind}\" is not in the checked schema.org list")
+                    continue
+                for k in sorted(keys - VOCAB[kind]):
+                    fails.append(f"{rel}: JSON-LD property \"{k}\" is not in the checked list for {kind}")
+                if "@id" in node and keys - {"name", "url"}:
+                    defined.add(node["@id"])
+                if "telephone" in node and re.sub(r"\D", "", node["telephone"]) not in tel_digits:
+                    fails.append(f"{rel}: JSON-LD phone {node['telephone']} is not a phone link on the page")
+                if "email" in node and "mailto:" + node["email"] not in {u for u, *_ in pg.urls}:
+                    fails.append(f"{rel}: JSON-LD email {node['email']} is not an email link on the page")
+                if kind == "PostalAddress":
+                    for k in ("streetAddress", "addressLocality", "postalCode"):
+                        if node.get(k, "") not in body_text:
+                            fails.append(f"{rel}: JSON-LD {k} \"{node.get(k)}\" is not in the page's visible text")
+                for k in ("url", "image", "item"):
+                    v = node.get(k)
+                    if isinstance(v, str):
+                        if not v.startswith(ORIGIN + "/"):
+                            fails.append(f"{rel}: JSON-LD {k} is not a dharmabarn.com address: {v}")
+                        elif resolve(site, path, v[len(ORIGIN):])[0] is None:
+                            fails.append(f"{rel}: JSON-LD {k} points to something not on the site: {v}")
+                for v in node.get("sameAs", []):
+                    if v not in {u for u, *_ in pg.urls}:
+                        fails.append(f"{rel}: JSON-LD profile link {v} is not a link on the page")
+    for ref in sorted(referenced - defined):
+        fails.append(f"JSON-LD points to {ref}, which no page defines")
+
+    ico = site / "favicon.ico"
+    if not ico.exists() or ico.read_bytes()[:4] != b"\x00\x00\x01\x00":
+        fails.append("favicon.ico is missing or is not an icon file")
+    robots = (site / "robots.txt").read_text() if (site / "robots.txt").exists() else ""
+    lines = [l.strip() for l in robots.splitlines()]
+    if f"Sitemap: {ORIGIN}/sitemap.xml" not in lines:
+        fails.append(f"robots.txt does not point at {ORIGIN}/sitemap.xml")
+    if any(re.fullmatch(r"disallow:\s*/", l, re.I) for l in lines):
+        fails.append("robots.txt blocks the whole site (Disallow: /)")
+    sm = site / "sitemap.xml"
+    for u in re.findall(r"<loc>([^<]+)</loc>", sm.read_text() if sm.exists() else ""):
+        if not u.startswith(ORIGIN + "/") or not u.endswith("/"):
+            fails.append(f"sitemap.xml: {u} should be an https://dharmabarn.com address ending in /")
+
+    rp, rules = site / "_redirects", []
+    if not rp.exists():
+        fails.append("_redirects is missing (permanent redirects for the old GoDaddy addresses)")
+    for n, line in enumerate(rp.read_text().splitlines() if rp.exists() else [], 1):
+        if not line.strip() or line.lstrip().startswith("#"):
+            continue
+        parts = line.split()
+        if len(parts) != 3 or not parts[0].startswith("/") or not parts[1].startswith("/"):
+            fails.append(f"_redirects:{n} should read \"/old-address /new-address/ 301\": {line}")
+            continue
+        src, dst, code = parts
+        if code != "301":
+            fails.append(f"_redirects:{n} uses {code}; old addresses need a permanent redirect (301)")
+        if src in [r[0] for r in rules]:
+            fails.append(f"_redirects:{n} repeats {src}")
+        if "*" not in src and ":" not in src and resolve(site, site / "index.html", src)[0] is not None:
+            fails.append(f"_redirects:{n} {src} is a real page or file on the site and would be hidden by the redirect")
+        if resolve(site, site / "index.html", dst)[0] is None:
+            fails.append(f"_redirects:{n} sends {src} to {dst}, which is not on the site")
+        elif not dst.endswith("/"):
+            fails.append(f"_redirects:{n} target {dst} should end in / (the form the pages are served at)")
+        rules.append((src, dst))
+    if rp.exists() and len(rules) > 2000:
+        fails.append("_redirects has more than Cloudflare's 2,000 rules")
+    return fails, (f"titles and descriptions within length, heading order, {blocks} JSON-LD blocks against {len(VOCAB)} "
+                   f"schema.org types, favicon, robots.txt, sitemap, {len(rules)} permanent redirects"
+                   + "".join(f"; {k}" for k in kept))
+
+
 def find_tool(name):
     hit = shutil.which(name)
     if hit:
@@ -389,7 +551,8 @@ def run(site, quiet=False):
     pages = load(site)
     total = []
     for title, fn in (("Links", check_links), ("HTML validity (basic)", check_html), ("Accessibility (basic)", check_a11y),
-                      ("Separate pages", check_pages), ("Search-engine headers and 404 page", check_headers_and_404)):
+                      ("Separate pages", check_pages), ("Search wording and data", check_search),
+                      ("Search-engine headers and 404 page", check_headers_and_404)):
         fails, note = fn(site, pages)
         say(f"{'FAIL' if fails else 'ok  '}  {title}: {note}")
         for f in fails:
@@ -417,8 +580,24 @@ PLANTS = [
     ("an unclosed tag", "404.html", "</main>", "<div></main>", "not closed"),
     ("noindex on every host", "_headers", "https://:version.:subdomain.workers.dev/*", "/*", "workers.dev"),
     ("a 404 page that redirects", "404.html", "<title>", '<meta http-equiv="refresh" content="0; url=/"><title>', "redirects"),
-    ("a page with another page's title", "recording/index.html", "<title>Recording · Dharma Barn</title>",
-     "<title>Video · Dharma Barn</title>", "same title"),
+    ("a page with another page's title", "recording/index.html", "<title>Recording Studio near Longmont, CO · Dharma Barn</title>",
+     "<title>Events · Dharma Barn</title>", "same title"),
+    ("a title that is too short", "video/index.html", "<title>Live Session Video &amp; Concert Filming, Colorado · Dharma Barn</title>",
+     "<title>Video</title>", "title is 5 characters"),
+    ("a skipped heading level", "recording/index.html", "<h2>Equipment</h2>", "<h4>Equipment</h4>", "heading order"),
+    ("noindex on a live page", "recording/index.html", "<title>", '<meta name="robots" content="noindex"><title>', "robots noindex tag"),
+    ("broken JSON in the facts block", "index.html", '"@context": "https://schema.org",', '"@context": "https://schema.org"', "not valid JSON"),
+    ("an invented schema.org type", "index.html", '"@type": "LocalBusiness"', '"@type": "RecordingStudio"', "not in the checked schema.org list"),
+    ("an invented fact (opening hours)", "index.html", '"sameAs": [', '"openingHours": "Mo-Su", "sameAs": [', "not in the checked list for LocalBusiness"),
+    ("a phone number that is not on the page", "index.html", '"telephone": "+1-720-878-5459"', '"telephone": "+1-720-555-0100"', "is not a phone link on the page"),
+    ("a facts block on the Events page", "events/index.html", "</head>",
+     '<script type="application/ld+json">{"@context": "https://schema.org", "@type": "LocalBusiness", "name": "Dharma Barn"}</script></head>',
+     "stay as it is until Chris decides"),
+    ("a missing favicon", "favicon.ico", None, None, "favicon.ico is missing"),
+    ("robots.txt that blocks the site", "robots.txt", "Allow: /", "Disallow: /", "blocks the whole site"),
+    ("a temporary redirect", "_redirects", "/lander / 301", "/lander / 302", "permanent redirect (301)"),
+    ("a redirect to a page that does not exist", "_redirects", "/lander/ / 301", "/lander/ /nowhere/ 301", "which is not on the site"),
+    ("an old forwarding page left in place", "contact/index.html", "<title>", '<meta http-equiv="refresh" content="0; url=/"><title>', "meta refresh"),
     ("a page left out of the sitemap", "sitemap.xml", "<url><loc>https://dharmabarn.com/events/</loc></url>\n", "", "sitemap.xml does not list"),
     ("a menu link back to a #hash view", "video/index.html", '<a href="/contact/">Contact</a>', '<a href="#contact">Contact</a>',
      "not a page address"),
@@ -435,6 +614,13 @@ def self_test(site):
             if (site / "media").exists():
                 os.symlink(site / "media", copy / "media")  # the video files are large; point at them instead of copying
             p = copy / fname
+            if old is None and new is None:  # plant: the file is gone
+                p.unlink()
+                fails = run(copy, quiet=True)
+                hit = [f for f in fails if expect in f]
+                print(f"{'ok  ' if hit else 'FAIL'}  planted {what}: {'caught — ' + hit[0][:110] if hit else 'NOT caught'}")
+                bad += 0 if hit else 1
+                continue
             text = p.read_text(encoding="utf-8")
             if what == "a removed skip link":
                 text = re.sub(r'<a class="skip"[^>]*>.*?</a>\n?', "", text, count=1)
