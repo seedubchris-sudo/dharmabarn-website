@@ -16,8 +16,9 @@ and script. It changes no photo or style. It also:
   permanent redirect (301) in site/_redirects, the file Cloudflare reads for static assets
 - lists all six pages in sitemap.xml and points the 404 page's links at them
 - sets the search wording (title, description, main heading) for Home, Recording, Video and Contact, and writes
-  the business facts for search engines (schema.org JSON-LD) from the FACTS table below. Events and Sundance
-  keep their wording exactly.
+  the one block of facts for search engines (schema.org JSON-LD) on those four pages: the business facts and
+  video entries come from listing_details.py, the service and page entries from structured_data() below. Events
+  and Sundance keep their wording exactly and carry no block.
 
 It stops with a message if a piece of text it expects is missing, so a change in the source cannot pass silently.
 Images, media, robots.txt and _headers in the output folder are left as they are.
@@ -27,6 +28,8 @@ import json
 import os
 import re
 import sys
+
+import listing_details
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 ORIGIN = "https://dharmabarn.com"
@@ -72,20 +75,11 @@ OLD_ADDRESSES = {"dharma-barn-recording": "/recording/", "dharma-barn-video": "/
                  "ola/services/audio-visual-capture-of-live-event": "/video/",
                  "ola/services/video-product-screening-events": "/sundance/"}
 
-# Business facts for search engines. Every value is already public on the site (footer, Contact page).
-# One place only: the JSON-LD is written from this table, and checks/site_checks.py compares it with the visible
-# page. Left out on purpose, because the site does not state them or the decision is not made: opening hours,
-# map coordinates, prices, reviews, "Dharma Farm" as a second name, and the events phone number.
-FACTS = {
-    "name": "Dharma Barn",
-    "phone": "+1-720-878-5459",  # Chris Wright, recording and video; shown on the pages as (720) 878-5459
-    "email": "dharmafarm@icloud.com",
-    "street": "12281 N 75th St", "city": "Longmont", "region": "CO", "postcode": "80503", "country": "US",
-    "profiles": ["https://www.youtube.com/@dharma_barn", "https://www.instagram.com/dharma_farm_/",
-                 "https://www.facebook.com/p/Dharma-Farm-100095685273767/"],
-    "about": "Recording studio and filmed live sessions in a 1918 barn in Hygiene, Colorado, between Longmont and Lyons.",
-}
-BUSINESS_ID = ORIGIN + "/#business"
+# Business facts for search engines live in listing_details.py (one place only). The build stops if one of them
+# is no longer on the page, and checks/site_checks.py compares the written block with the visible page.
+FACTS = listing_details.FACTS
+BUSINESS_ID = listing_details.BUSINESS_ID
+business = listing_details.business
 
 # In-text links between the pages (same words, now links), so each service page points at the other.
 TEXT_LINKS = [
@@ -111,29 +105,16 @@ HEADING_CSS = [
 ]
 
 
-def business():
-    f = FACTS
-    return {
-        "@type": "LocalBusiness", "@id": BUSINESS_ID, "name": f["name"],
-        "additionalType": "https://www.wikidata.org/wiki/Q746369",  # "recording studio"; schema.org has no such type
-        "description": f["about"], "url": ORIGIN + "/", "image": ORIGIN + "/img/barn-dusk.jpg",
-        "telephone": f["phone"], "email": f["email"],
-        "address": {"@type": "PostalAddress", "streetAddress": f["street"], "addressLocality": f["city"],
-                    "addressRegion": f["region"], "postalCode": f["postcode"], "addressCountry": f["country"]},
-        "contactPoint": [{"@type": "ContactPoint", "contactType": "Recording and video",
-                          "telephone": f["phone"], "email": f["email"]}],
-        "sameAs": f["profiles"],
-    }
-
-
 def crumbs(name):
     return {"@type": "BreadcrumbList", "itemListElement": [
         {"@type": "ListItem", "position": 1, "name": FACTS["name"], "item": ORIGIN + "/"},
         {"@type": "ListItem", "position": 2, "name": name}]}
 
 
-def structured_data(view):
-    """schema.org facts for one page, or None. Events and Sundance get none (their promotion waits on Chris)."""
+def structured_data(view, source):
+    """The one schema.org block for a page, or None. Events and Sundance get none (their promotion waits on Chris).
+    `source` is the one-file site's HTML; the business facts and video entries are checked against it."""
+    listing_details.verify(source, stop)
     provider = {"@type": "LocalBusiness", "@id": BUSINESS_ID, "name": FACTS["name"], "url": ORIGIN + "/"}
     if view == "home":
         graph = [business(), {"@type": "WebSite", "@id": ORIGIN + "/#website", "name": FACTS["name"],
@@ -161,6 +142,7 @@ def structured_data(view):
                  business(), crumbs("Contact")]
     else:
         return None
+    graph += listing_details.videos(view, source, stop)  # only where the video plays on the page
     text = json.dumps({"@context": "https://schema.org", "@graph": graph}, ensure_ascii=False, indent=1)
     return '<script type="application/ld+json">\n' + text.replace("</", "<\\/") + "\n</script>\n"
 
@@ -287,7 +269,7 @@ def build(src, out):
             head, n3 = re.subn(rf'(<nav class="nav".*?<a href="{re.escape(p["path"])}")', r'\1 aria-current="page"', head, count=1, flags=re.S)
             if n3 != 1:
                 stop(f"menu link for {p['path']} not found")
-        ld = structured_data(p["view"])
+        ld = structured_data(p["view"], s)
         if ld:
             head = swap(head, "</head>", ld + "</head>", "end of head")
         head = swap(head, "<body>", f'<body data-view="{p["view"]}">', "body tag")

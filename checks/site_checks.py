@@ -5,7 +5,8 @@
     python3 checks/site_checks.py --self-test  # prove the checks catch planted faults (works on a temp copy)
 
 Checks: broken internal links and anchors, basic HTML validity, accessibility basics (skip link, one h1 per
-page view, image alt text, names on buttons and links, labels on fields), the workers.dev noindex rule, the 404
+page view, image alt text, names on buttons and links, labels on fields), the listing details for search
+engines (one block per page, saying only what the page says), the workers.dev noindex rule, the 404
 page, and the Worker's headers. Nothing is fetched from the network and nothing is installed. Uses only Python 3
 and, for the Worker test, node. If lychee, html-validate or pa11y-ci are installed they run too; if not, that
 extra check is skipped with a message and the built-in checks still run. Exit code 0 = all passed, 1 = a failure.
@@ -17,6 +18,7 @@ import subprocess
 import sys
 import tempfile
 import xml.dom.minidom
+from datetime import datetime
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
@@ -346,7 +348,7 @@ def check_pages(site, pages):
 # schema.org's published vocabulary on 2026-11-22. A type or property that is not listed fails the check, so a
 # new one has to be looked up and added on purpose.
 VOCAB = {
-    "LocalBusiness": {"name", "additionalType", "description", "url", "image", "telephone", "email", "address",
+    "LocalBusiness": {"name", "description", "url", "image", "telephone", "email", "address",
                       "contactPoint", "sameAs"},
     "PostalAddress": {"streetAddress", "addressLocality", "addressRegion", "postalCode", "addressCountry"},
     "ContactPoint": {"contactType", "telephone", "email"},
@@ -357,6 +359,7 @@ VOCAB = {
     "BreadcrumbList": {"itemListElement"},
     "ListItem": {"position", "name", "item"},
     "ContactPage": {"name", "url", "mainEntity"},
+    "VideoObject": {"name", "description", "thumbnailUrl", "uploadDate", "publisher", "embedUrl", "contentUrl", "duration"},
 }
 LD_BLOCK = re.compile(r'<script type="application/ld\+json">(.*?)</script>', re.S)
 # Events and Sundance keep their wording until Chris decides: no facts block, and a short title is reported, not failed.
@@ -504,6 +507,96 @@ def check_search(site, pages):
                    + "".join(f"; {k}" for k in kept))
 
 
+def check_listing(site, pages):
+    """Listing details for search engines: exactly one JSON-LD block on each page that carries one (none on Events
+    and Sundance), one full business entry at most, with an address, phone number, email and links that are all on
+    that page, nothing the site does not state, and video entries only for videos that page plays."""
+    import json
+    fails, n_pages, n_biz, n_videos = [], 0, 0, 0
+    for path, pg in pages.items():
+        rel = path.relative_to(site).as_posix()
+        if REDIRECT_STUB.search(pg.text) or rel == "404.html" or rel in FROZEN_PAGES:
+            continue
+        n_pages += 1
+        blocks = LD_BLOCK.findall(pg.text)
+        if len(blocks) != 1:
+            fails.append(f"{rel}: needs exactly one block of listing details, found {len(blocks)}")
+            continue
+        try:
+            data = json.loads(blocks[0])
+        except ValueError as exc:
+            fails.append(f"{rel}: listing details are not valid JSON: {exc}")
+            continue
+        graph = data.get("@graph") if isinstance(data, dict) else None
+        if not isinstance(graph, list) or data.get("@context") != "https://schema.org":
+            fails.append(f"{rel}: listing details need @context https://schema.org and a @graph list")
+            continue
+        body = pg.text.split("</head>", 1)[-1]
+        visible = " ".join(" ".join(e["text"] for e in pg.find("body")).split())
+        hrefs = {a["attrs"].get("href", "") for a in pg.find("a")}
+        tel_digits = {re.sub(r"\D", "", h[4:]) for h in hrefs if h.startswith("tel:")}
+        biz = [g for g in graph if g.get("@type") == "LocalBusiness"]
+        if len(biz) > 1:
+            fails.append(f"{rel}: listing details need one business entry at most, found {len(biz)}")
+        if rel in ("index.html", "contact/index.html") and len(biz) != 1:
+            fails.append(f"{rel}: listing details need exactly one business entry, found {len(biz)}")
+        for b in biz:
+            n_biz += 1
+            addr = b.get("address") or {}
+            for key in ("streetAddress", "addressLocality", "addressRegion", "postalCode"):
+                if not addr.get(key) or addr[key] not in visible:
+                    fails.append(f"{rel}: listing address part {key}={addr.get(key)!r} is not in the page text")
+            if not b.get("name") or b["name"] not in visible:
+                fails.append(f"{rel}: listing business name {b.get('name')!r} is not in the page text")
+            if b.get("url") != ORIGIN + "/":
+                fails.append(f"{rel}: listing business address should be {ORIGIN}/")
+            phones = [c.get("telephone", "") for c in b.get("contactPoint", [])] + ([b["telephone"]] if b.get("telephone") else [])
+            if not phones:
+                fails.append(f"{rel}: listing details give no phone number")
+            if len({re.sub(r"\D", "", ph) for ph in phones}) > 1:
+                fails.append(f"{rel}: listing details give more than one phone number; one is agreed until Chris decides")
+            for ph in phones:
+                if re.sub(r"\D", "", ph) not in tel_digits:
+                    fails.append(f"{rel}: listing phone number {ph} is not a phone link on the page")
+            for c in b.get("contactPoint", []):  # the role is printed beside the number on the Contact page only
+                if rel == "contact/index.html" and c.get("contactType") and c["contactType"] not in visible:
+                    fails.append(f"{rel}: listing phone role {c['contactType']!r} is not in the page text")
+            if b.get("email") and "mailto:" + b["email"] not in hrefs:
+                fails.append(f"{rel}: listing email {b['email']} is not an email link on the page")
+            for u in b.get("sameAs", []):
+                if u not in hrefs:
+                    fails.append(f"{rel}: listing link {u} is not a link on the page")
+            for key in ("openingHours", "openingHoursSpecification", "geo", "priceRange", "aggregateRating", "review",
+                        "alternateName", "additionalType"):
+                if key in b:
+                    fails.append(f"{rel}: listing details state {key}, which the site does not state or Chris has not decided")
+        for g in graph:
+            if g.get("@type") != "VideoObject":
+                continue
+            n_videos += 1
+            name = g.get("name", "")
+            if not name or name not in body:
+                fails.append(f"{rel}: video listing name {name!r} is not on the page")
+            thumb = g.get("thumbnailUrl", "")
+            if not thumb.startswith(ORIGIN + "/") or not (site / thumb[len(ORIGIN) + 1:]).exists():
+                fails.append(f"{rel}: video listing \"{name}\": thumbnail is missing from the site: {thumb}")
+            try:
+                if datetime.fromisoformat(g.get("uploadDate", "")).tzinfo is None:
+                    raise ValueError("no time zone")
+            except ValueError:
+                fails.append(f"{rel}: video listing \"{name}\": uploadDate must be a full date and time with a time zone")
+            embed, content = g.get("embedUrl", ""), g.get("contentUrl", "")
+            if not embed and not content:
+                fails.append(f"{rel}: video listing \"{name}\" needs embedUrl or contentUrl")
+            if embed and embed.rsplit("/", 1)[-1] not in body:
+                fails.append(f"{rel}: video listing \"{name}\": the video {embed} does not play on this page")
+            if content and (not content.startswith(ORIGIN + "/") or not (site / content[len(ORIGIN) + 1:]).exists()
+                            or content[len(ORIGIN):] not in body):
+                fails.append(f"{rel}: video listing \"{name}\": the file {content} is not on this page or not in the site")
+    return fails, (f"{n_pages} pages with exactly one block; {n_biz} business entries that match the page; "
+                   f"{n_videos} video entries")
+
+
 def find_tool(name):
     hit = shutil.which(name)
     if hit:
@@ -552,6 +645,7 @@ def run(site, quiet=False):
     total = []
     for title, fn in (("Links", check_links), ("HTML validity (basic)", check_html), ("Accessibility (basic)", check_a11y),
                       ("Separate pages", check_pages), ("Search wording and data", check_search),
+                      ("Listing details for search engines", check_listing),
                       ("Search-engine headers and 404 page", check_headers_and_404)):
         fails, note = fn(site, pages)
         say(f"{'FAIL' if fails else 'ok  '}  {title}: {note}")
@@ -601,6 +695,29 @@ PLANTS = [
     ("a page left out of the sitemap", "sitemap.xml", "<url><loc>https://dharmabarn.com/events/</loc></url>\n", "", "sitemap.xml does not list"),
     ("a menu link back to a #hash view", "video/index.html", '<a href="/contact/">Contact</a>', '<a href="#contact">Contact</a>',
      "not a page address"),
+    ("a page with no listing details", "recording/index.html", '<script type="application/ld+json">', '<script type="text/plain">',
+     "needs exactly one block of listing details"),
+    ("a page with two blocks of listing details", "contact/index.html", "</head>",
+     '<script type="application/ld+json">{"@context": "https://schema.org", "@graph": []}</script></head>',
+     "needs exactly one block of listing details"),
+    ("listing details that are not valid JSON", "video/index.html", '"@context": "https://schema.org",', '"@context": "https://schema.org"',
+     "listing details are not valid JSON"),
+    ("a listing phone number that is not on the page", "contact/index.html", '"telephone": "+1-720-878-5459"',
+     '"telephone": "+1-303-555-0100"', "listing phone number +1-303-555-0100 is not a phone link on the page"),
+    ("a second phone number in the listing details", "contact/index.html", '"contactType": "Recording and video",\n     "telephone": "+1-720-878-5459"',
+     '"contactType": "Recording and video",\n     "telephone": "+1-303-808-1091"', "more than one phone number"),
+    ("a phone role the Contact page does not print", "contact/index.html", '"contactType": "Recording and video"',
+     '"contactType": "Bookings"', "listing phone role"),
+    ("a listing address that is not on the page", "contact/index.html", '"postalCode": "80503"', '"postalCode": "80301"',
+     "is not in the page text"),
+    ("a second business name in the listing details", "index.html", '"sameAs": [', '"alternateName": "Dharma Farm", "sameAs": [',
+     "listing details state alternateName"),
+    ("a video listing with a missing thumbnail", "video/index.html", 'img/shook-twins-poster.jpg",', 'img/no-such-poster.jpg",',
+     "thumbnail is missing"),
+    ("a video listing for a video the page does not play", "index.html", '"embedUrl": "https://www.youtube-nocookie.com/embed/s7iopa9lM4o"',
+     '"embedUrl": "https://www.youtube-nocookie.com/embed/AAAAAAAAAAA"', "does not play on this page"),
+    ("a video listing with no upload date", "video/index.html", '"uploadDate": "2026-10-01T18:35:21-06:00",', '"uploadDate": "",',
+     "uploadDate must be"),
 ]
 
 

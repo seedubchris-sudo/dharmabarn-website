@@ -9,14 +9,31 @@ Edit the preview `index.html`, then rebuild into `site/` rather than editing `in
 DNS is in the Cloudflare zone `dharmabarn.com` (moved from GoDaddy on 2026-10-01; GoDaddy is still the registrar).
 Email records (MX/TXT for Microsoft 365) are unchanged.
 
-## Search wording (branch `up/2026-11-22-seo-wording`, not staged, not deployed)
+## Combined branch `up/2026-11-22-combined` (on the preview address only, not released)
+
+This branch joins `up/2026-11-22-seo-wording` and `up/2026-11-22-listing-details`. Release needs Chris's yes.
+
+- One block of facts for search engines per page, on Home, Recording, Video and Contact. Events and Sundance carry
+  none. `build_pages.py` writes it at build time: the business facts and video entries come from
+  `listing_details.py`, the service and page entries from `structured_data()` in `build_pages.py`. Nothing else
+  writes a block. The build stops if a business fact is no longer in the page source.
+- Business entry: plain `LocalBusiness`, name, the footer's street address, email, the three footer links and one
+  phone number, (720) 878-5459, with the role the Contact page prints for it. Left out until Chris decides: the
+  events phone number, a studio or venue type, "Dharma Farm" as a second name, hours, coordinates and prices.
+- Video entries only where the video plays on the page: the reel on Home; the Shook Twins show and the Cactus Pals
+  clip on Video. The two YouTube dates are the upload dates YouTube shows (read 2026-11-22). The Cactus Pals date
+  is the day the file was added to this site (commit `fce6a99`).
+- Two check groups cover the block: "Search wording and data" and "Listing details for search engines".
+- Google's Rich Results Test has not been run.
+
+## Search wording (branch `up/2026-11-22-seo-wording`)
 
 Built on top of the separate pages below. Not released; release needs Chris's yes.
 
 - Titles, descriptions and the main heading of Home, Recording, Video and Contact use the words people type for
   recording and filmed live sessions near Longmont. They are in the `PAGES` list in `build_pages.py`. Every
   statement is already on the site. Events and Sundance keep their wording exactly.
-- Business facts for search engines (schema.org JSON-LD) are written from the `FACTS` table in `build_pages.py`:
+- Business facts for search engines (schema.org JSON-LD) are written from the `FACTS` table in `listing_details.py`:
   name, the recording and video phone number, email, street address and the three profile links, all already public
   on the site. No hours, coordinates, prices or reviews. Events and Sundance carry no facts block.
 - Old GoDaddy addresses are permanent redirects (301) in `site/_redirects`, the file Cloudflare reads for static
@@ -56,7 +73,7 @@ python3 build_pages.py   # reads src/single-page.html, writes the six pages, red
 
 ```bash
 python3 checks/site_checks.py              # checks ./site; exit code 1 on any problem
-python3 checks/site_checks.py --self-test  # plants 24 faults on a temporary copy and confirms each is caught
+python3 checks/site_checks.py --self-test  # plants 35 faults on a temporary copy and confirms each is caught
 ```
 
 The "Separate pages" check confirms each page has its own title and description, the right canonical address, an
